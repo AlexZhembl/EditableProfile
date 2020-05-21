@@ -12,12 +12,11 @@ import Swinject
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    private var dependencyProvider = DependencyProvider()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
        
-        let rootViewController = dependencyProvider.assembler.resolver.resolve(RootViewController.self)!
+        let rootViewController = DependencyProvider.shared.assembler.resolver.resolve(RootViewController.self)!
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
         self.window = window

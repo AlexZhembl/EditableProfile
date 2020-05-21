@@ -13,7 +13,7 @@ class RootAssembly: Assembly {
     func assemble(container: Container) {
         container.register(RootRouter.self) { r in
             RootRouterImpl() {
-                return container.resolve(RootViewController.self)!
+                return container.resolve(RootViewController.self)
             }
         }
         

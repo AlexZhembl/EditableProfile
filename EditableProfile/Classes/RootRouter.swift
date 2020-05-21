@@ -13,13 +13,14 @@ protocol RootRouter {
 
 final class RootRouterImpl: RootRouter {
     
-    private let presentingController: () -> UIViewController
+    private let presentingController: () -> UIViewController?
     
-    init(presentingController: @escaping () -> UIViewController) {
+    init(presentingController: @escaping () -> UIViewController?) {
         self.presentingController = presentingController
     }
     
     func presentUserProfileViewController() {
-       
+        let editProfileVC = DependencyProvider.shared.assembler.resolver.resolve(UserProfileViewController.self)!
+        presentingController()?.present(editProfileVC, animated: true, completion: nil)
     }
 }

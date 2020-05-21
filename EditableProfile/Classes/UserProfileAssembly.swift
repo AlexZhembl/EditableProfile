@@ -11,21 +11,30 @@ import Swinject
 class UserProfileAssembly: Assembly {
 
     func assemble(container: Container) {
-        container.register(RootRouter.self) { r in
-            RootRouterImpl() {
-                return container.resolve(RootViewController.self)!
+        container.register(UserProfileRouter.self) { r in
+            UserProfileRouterImpl(imagePicker: container.resolve(ImagePicker.self)!) {
+                return container.resolve(UserProfileViewController.self)!
             }
         }
         
-        container.register(RootViewModelImpl.self) { r in
-            RootViewModelImpl(settings: r.resolve(SettingsStorage.self)!, router: r.resolve(RootRouter.self)!)
+        container.register(UserProfileViewModelImpl.self) { r in
+            UserProfileViewModelImpl(router: r.resolve(UserProfileRouter.self)!,
+                                     attributesAndLocationsFetcher: r.resolve(UserProfileAttributesAndLocationsFetcher.self)!)
         }
         
-        container.register(RootViewController.self) { r in
-            let viewModel = r.resolve(RootViewModelImpl.self)!
-            let controller = RootViewController(viewModel: viewModel)
+        container.register(UserProfileViewController.self) { r in
+            let viewModel = r.resolve(UserProfileViewModelImpl.self)!
+            let controller = UserProfileViewController(viewModel: viewModel)
             viewModel.view = controller
             return controller
         }.inObjectScope(.weak)
+        
+        container.register(ImagePicker.self) { _ in
+            ImagePickerImpl()
+        }
+        
+        container.register(UserProfileAttributesAndLocationsFetcher.self) { r in
+            UserProfileAttributesAndLocationsFetcherImpl(httpFabric: r.resolve(HTTPFabric.self)!)
+        }
     }
 }

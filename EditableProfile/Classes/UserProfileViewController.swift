@@ -8,12 +8,26 @@
 import UIKit
 
 protocol UserProfileView: class {
-
+    func setupProfileElements(with model: UserProfileElementsView.Model)
 }
 
 final class UserProfileViewController: UIViewController {
     
     private let viewModel: UserProfileViewModel
+    private lazy var elementsView: UserProfileElementsView = {
+        let elementsView = UserProfileElementsView(pictureButtonAction: { [weak self] in
+            self?.viewModel.profilePictureDidTap()
+        })
+        elementsView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(elementsView)
+        NSLayoutConstraint.activate([
+            elementsView.topAnchor.constraint(equalTo: view.topAnchor),
+            elementsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            elementsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            elementsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        return elementsView
+    }()
 
     init(viewModel: UserProfileViewModel) {
        self.viewModel = viewModel
@@ -42,5 +56,7 @@ final class UserProfileViewController: UIViewController {
 }
 
 extension UserProfileViewController: UserProfileView {
-    
+    func setupProfileElements(with model: UserProfileElementsView.Model) {
+        elementsView.setup(with: model)
+    }
 }

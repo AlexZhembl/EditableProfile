@@ -34,10 +34,10 @@ final class RootViewModelImpl: RootViewModel {
     }
     
     func registerDidTap() {
-        
+        router.presentUserProfileViewController()
     }
     
     func editProfileDidTap() {
-        
+        router.presentUserProfileViewController()
     }
 }

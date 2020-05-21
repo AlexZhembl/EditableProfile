@@ -4,6 +4,7 @@ target 'EditableProfile' do
   use_frameworks!
 
   pod 'Swinject'
+  pod 'Alamofire', '~> 5.2'
 
   target 'EditableProfileTests' do
     inherit! :search_paths

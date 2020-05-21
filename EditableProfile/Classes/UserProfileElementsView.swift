@@ -10,8 +10,9 @@ import UIKit
 final class UserProfileElementsView: UIView {
     
     struct Model {
-        typealias Content = (text: String?, placeholderText: String)
+        typealias Content = (text: String?, placeholder: String)
         
+        let profileImage: UIImage?
         let displayName: Content
         let realName: Content
         let location: Content
@@ -24,8 +25,7 @@ final class UserProfileElementsView: UIView {
         let height: Content
         let occupation: Content
         let aboutMe: Content
-        let doneButtonText: Content
-        
+        let doneButtonText: String
     }
     
     private enum Constants {
@@ -56,9 +56,9 @@ final class UserProfileElementsView: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = Constants.pictureButtonSize.width * 0.5
-        button.setImage(UIImage(named: "default_profile"), for: .normal)
         button.clipsToBounds = true
         button.layer.borderWidth = 0.5
+        button.addTarget(self, action: #selector(pictureButtonDidTap), for: .touchUpInside)
         return button
     }()
     private let displayNameField = UITextField.singleLineTextField()
@@ -72,11 +72,7 @@ final class UserProfileElementsView: UIView {
     private let figureButton = UIButton.singleChoiceButton()
     private let heightField = UITextField.singleLineTextField()
     private let occupationField = UITextField.singleLineTextField()
-    private let aboutMeField: UITextView = {
-        let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
-    }()
+    private let aboutMeField = UITextView.configuredTextView()
     private let doneButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -85,11 +81,15 @@ final class UserProfileElementsView: UIView {
         return button
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    private let pictureButtonAction: () -> Void
+    
+    init(pictureButtonAction: @escaping () -> Void) {
+        self.pictureButtonAction = pictureButtonAction
+        super.init(frame: .zero)
+        
         setupSubviews()
     }
-    
+
     required init?(coder: NSCoder) {
         preconditionFailure("init(coder:) has not been implemented")
     }
@@ -99,6 +99,9 @@ final class UserProfileElementsView: UIView {
     }
     
     func setup(with model: Model) {
+        let profileImage = model.profileImage == nil ? UIImage(named: "default_profile") : model.profileImage
+        pictureButton.setImage(profileImage, for: .normal)
+        
         displayNameField.setContent(model.displayName)
         realNameField.setContent(model.realName)
         locationField.setContent(model.location)
@@ -110,7 +113,11 @@ final class UserProfileElementsView: UIView {
         figureButton.setContent(model.figure)
         heightField.setContent(model.height)
         occupationField.setContent(model.occupation)
-   //     aboutMeField.setContent(model.aboutMe)
+        aboutMeField.setContent(model.aboutMe)
+    }
+    
+    @objc func pictureButtonDidTap() {
+        pictureButtonAction()
     }
 }
 
@@ -123,16 +130,21 @@ fileprivate extension UIButton {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.shadowRadius = 0.5
         button.backgroundColor = .white
-        button.layer.sublayerTransform = CATransform3DMakeTranslation(5, 0, 0);
         button.setTitleColor(.gray, for: .normal)
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOffset = .zero
         button.layer.shadowOpacity = 1
+        button.setImage(UIImage(named: "button_arrow"), for: .normal)
+        button.titleLabel?.textAlignment = .left
+        button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        button.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        button.imageView?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
         return button
     }
     
     func setContent(_ content: UserProfileElementsView.Model.Content) {
-        let title = content.text == nil ? content.placeholderText : content.text
+        let title = content.text == nil ? content.placeholder : content.text
         setTitle(title, for: .normal)
     }
 }
@@ -154,7 +166,28 @@ fileprivate extension UITextField {
     
     func setContent(_ content: UserProfileElementsView.Model.Content) {
         text = content.text
-        placeholder = content.placeholderText
+        placeholder = content.placeholder
+    }
+}
+
+fileprivate extension UITextView {
+    
+    static func configuredTextView() -> UITextView {
+        let textView = UITextView()
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = .white
+        textView.layer.shadowRadius = 0.5
+        textView.textColor = .gray
+        textView.layer.shadowColor = UIColor.black.cgColor
+        textView.layer.shadowOffset = .zero
+        textView.layer.shadowOpacity = 1
+        textView.clipsToBounds = false
+        return textView
+    }
+    
+    func setContent(_ content: UserProfileElementsView.Model.Content) {
+        let title = content.text == nil ? content.placeholder : content.text
+        text = title
     }
 }
 
