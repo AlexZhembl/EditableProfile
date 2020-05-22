@@ -28,6 +28,8 @@
 		AC6B621424769C2000971D2F /* UserProfileAttributesAndLocationsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621324769C2000971D2F /* UserProfileAttributesAndLocationsFetcher.swift */; };
 		AC6B62162476A01400971D2F /* HTTPFabric.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B62152476A01400971D2F /* HTTPFabric.swift */; };
 		AC6B62192476B85500971D2F /* AttributesAndLocationsFetcherResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B62182476B85500971D2F /* AttributesAndLocationsFetcherResponses.swift */; };
+		AC6B621B2476C39000971D2F /* SingleChoicePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621A2476C39000971D2F /* SingleChoicePickerView.swift */; };
+		AC6B621D247717F000971D2F /* UserProfileElementsViewSubviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */; };
 		CF89825B659A5986BCA76560 /* Pods_EditableProfile_EditableProfileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F476D0A074B939C3909B56CE /* Pods_EditableProfile_EditableProfileUITests.framework */; };
 		F00ABD61B5DBFBF191A3C147 /* Pods_EditableProfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8829F918D2810955CFF2CF /* Pods_EditableProfile.framework */; };
 /* End PBXBuildFile section */
@@ -83,6 +85,8 @@
 		AC6B621324769C2000971D2F /* UserProfileAttributesAndLocationsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileAttributesAndLocationsFetcher.swift; sourceTree = "<group>"; };
 		AC6B62152476A01400971D2F /* HTTPFabric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPFabric.swift; sourceTree = "<group>"; };
 		AC6B62182476B85500971D2F /* AttributesAndLocationsFetcherResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributesAndLocationsFetcherResponses.swift; sourceTree = "<group>"; };
+		AC6B621A2476C39000971D2F /* SingleChoicePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleChoicePickerView.swift; sourceTree = "<group>"; };
+		AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileElementsViewSubviews.swift; sourceTree = "<group>"; };
 		AFF0D93AD119CB61AC98EB1A /* Pods-EditableProfile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EditableProfile.debug.xcconfig"; path = "Target Support Files/Pods-EditableProfile/Pods-EditableProfile.debug.xcconfig"; sourceTree = "<group>"; };
 		F476D0A074B939C3909B56CE /* Pods_EditableProfile_EditableProfileUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EditableProfile_EditableProfileUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -208,6 +212,8 @@
 			isa = PBXGroup;
 			children = (
 				AC6B620D247539F000971D2F /* UserProfileElementsView.swift */,
+				AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */,
+				AC6B621A2476C39000971D2F /* SingleChoicePickerView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -493,8 +499,10 @@
 				AC6B620E247539F000971D2F /* UserProfileElementsView.swift in Sources */,
 				AC6B620B2475326200971D2F /* UserProfileViewModel.swift in Sources */,
 				AC6B62102475809800971D2F /* ImagePicker.swift in Sources */,
+				AC6B621D247717F000971D2F /* UserProfileElementsViewSubviews.swift in Sources */,
 				AC6B62092475325300971D2F /* UserProfileViewController.swift in Sources */,
 				AC6B62122475860700971D2F /* UserProfileRouter.swift in Sources */,
+				AC6B621B2476C39000971D2F /* SingleChoicePickerView.swift in Sources */,
 				AC6B61FB24751F2800971D2F /* RootViewModel.swift in Sources */,
 				AC6B621424769C2000971D2F /* UserProfileAttributesAndLocationsFetcher.swift in Sources */,
 			);

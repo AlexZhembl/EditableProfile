@@ -8,25 +8,25 @@
 import UIKit
 
 final class UserProfileElementsView: UIView {
-    
-    struct Model {
-        typealias Content = (text: String?, placeholder: String)
-        
-        let profileImage: UIImage?
-        let displayName: Content
-        let realName: Content
-        let location: Content
-        let bDay: Content
-        let gender: Content
-        let ethnicity: Content
-        let religion: Content
-        let figure: Content
-        let maritalStatus: Content
-        let height: Content
-        let occupation: Content
-        let aboutMe: Content
-        let doneButtonText: String
-    }
+	
+	enum Element {
+		typealias TextContent = (text: String?, placeholder: String?)
+		
+		case profileImage(UIImage?)
+		case displayName(TextContent)
+		case realName(TextContent)
+		case location(TextContent)
+		case bDay(TextContent)
+		case gender(TextContent)
+		case ethnicity(TextContent)
+		case religion(TextContent)
+		case figure(TextContent)
+		case maritalStatus(TextContent)
+		case height(TextContent, isEnabled: Bool)
+		case occupation(TextContent)
+		case aboutMe(TextContent)
+		case doneButton(TextContent)
+	}
     
     private enum Constants {
         static let pictureButtonSize = CGSize(width: 70, height: 70)
@@ -36,7 +36,8 @@ final class UserProfileElementsView: UIView {
         static let doneButtonSize = CGSize(width: 100, height: 50)
         
         static let containerViewInsets: UIEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        static let verticalSpacing: CGFloat = 20.0
+		static let verticalSpacing: CGFloat = 20.0
+		static let singleChoiceViewHeight: CGFloat = 150.0
     }
     
     private let scrollView: UIScrollView = {
@@ -52,39 +53,39 @@ final class UserProfileElementsView: UIView {
         view.backgroundColor = .white
         return view
     }()
-    private let pictureButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private let pictureButton: UserProfilePictureButton = {
+		let button = UserProfilePictureButton(target: self, action: #selector(pictureButtonDidTap))
         button.layer.cornerRadius = Constants.pictureButtonSize.width * 0.5
-        button.clipsToBounds = true
-        button.layer.borderWidth = 0.5
-        button.addTarget(self, action: #selector(pictureButtonDidTap), for: .touchUpInside)
+        
         return button
     }()
-    private let displayNameField = UITextField.singleLineTextField()
-    private let realNameField = UITextField.singleLineTextField()
-    private let locationField = UITextField.singleLineTextField()
-    private let bDayButton = UIButton.singleChoiceButton()
-    private let genderButton = UIButton.singleChoiceButton()
-    private let maritalStatusButton = UIButton.singleChoiceButton()
-    private let ethnicityButton = UIButton.singleChoiceButton()
-    private let religionButton = UIButton.singleChoiceButton()
-    private let figureButton = UIButton.singleChoiceButton()
-    private let heightField = UITextField.singleLineTextField()
-    private let occupationField = UITextField.singleLineTextField()
-    private let aboutMeField = UITextView.configuredTextView()
-    private let doneButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private let displayNameField = UserProfileTextField()
+    private let realNameField = UserProfileTextField()
+    private let locationField = UserProfileTextField()
+    private let bDayButton = UserProfileButton(target: self, action: #selector(bDayButtonDidTap))
+    private let genderButton = UserProfileButton(target: self, action: #selector(genderButtonDidTap))
+    private let maritalStatusButton = UserProfileButton(target: self, action: #selector(maritalStatusButtonDidTap))
+    private let ethnicityButton = UserProfileButton(target: self, action: #selector(ethnicityButtonDidTap))
+    private let religionButton = UserProfileButton(target: self, action: #selector(religionButtonDidTap))
+    private let figureButton = UserProfileButton(target: self, action: #selector(figureButtonDidTap))
+    private let heightField = UserProfileTextField()
+    private let occupationField = UserProfileTextField()
+    private let aboutMeField = UserProfileTextView()
+    private let doneButton: UserProfileButton = {
+        let button = UserProfileButton(target: self, action: #selector(doneButtonDidTap))
         button.layer.cornerRadius = 8.0
         button.backgroundColor = .blue
         return button
     }()
+	private lazy var singlePickerView = SingleChoicePickerView()
+	private var singlePickerViewConstraints: [NSLayoutConstraint] = []
     
-    private let pictureButtonAction: () -> Void
-    
-    init(pictureButtonAction: @escaping () -> Void) {
-        self.pictureButtonAction = pictureButtonAction
+    private let elementInteractionClosure: (Element) -> Void
+    private let singlePickerClosure: (SingleChoicePickerViewChoicable, Element) -> Void
+	
+	init(elementInteractionClosure: @escaping (Element) -> Void, singlePickerClosure: @escaping (SingleChoicePickerViewChoicable, Element) -> Void) {
+        self.elementInteractionClosure = elementInteractionClosure
+		self.singlePickerClosure = singlePickerClosure
         super.init(frame: .zero)
         
         setupSubviews()
@@ -97,97 +98,100 @@ final class UserProfileElementsView: UIView {
     private func setupSubviews() {
         setupLayout()
     }
-    
-    func setup(with model: Model) {
-        let profileImage = model.profileImage == nil ? UIImage(named: "default_profile") : model.profileImage
-        pictureButton.setImage(profileImage, for: .normal)
-        
-        displayNameField.setContent(model.displayName)
-        realNameField.setContent(model.realName)
-        locationField.setContent(model.location)
-        bDayButton.setContent(model.bDay)
-        genderButton.setContent(model.gender)
-        maritalStatusButton.setContent(model.maritalStatus)
-        ethnicityButton.setContent(model.ethnicity)
-        religionButton.setContent(model.religion)
-        figureButton.setContent(model.figure)
-        heightField.setContent(model.height)
-        occupationField.setContent(model.occupation)
-        aboutMeField.setContent(model.aboutMe)
-    }
-    
-    @objc func pictureButtonDidTap() {
-        pictureButtonAction()
-    }
+	
+	func updateView(with elements: [Element]) {
+		elements.forEach { element in
+			switch element {
+			case .profileImage(let image): pictureButton.setContent(image)
+			case .displayName(let text): displayNameField.setContent(text)
+			case .realName(let text): realNameField.setContent(text)
+			case .location(let text): locationField.setContent(text)
+			case .bDay(let text): bDayButton.setContent(text)
+			case .gender(let text): genderButton.setContent(text)
+			case .ethnicity(let text): ethnicityButton.setContent(text)
+			case .religion(let text): religionButton.setContent(text)
+			case .figure(let text): figureButton.setContent(text)
+			case .maritalStatus(let text): maritalStatusButton.setContent(text)
+			case .height(let text, let isEnabled): heightField.setContent(text)
+			case .occupation(let text): occupationField.setContent(text)
+			case .aboutMe(let text): aboutMeField.setContent(text)
+			case .doneButton(let text): doneButton.setContent(text)
+			}
+		}
+	}
+	
+	func setupSingleChoicePicker(for element: UserProfileElementsView.Element, with choices: [SingleChoicePickerViewChoicable]) {
+		let relatedView = view(for: element)
+
+		setupSinglePickerLayout(with: relatedView)
+		singlePickerView.setup(with: choices) { [weak self] choice in
+			self?.singlePickerClosure(choice, element)
+		}
+	}
+	
+	func dismissSinglePicker() {
+		singlePickerView.removeFromSuperview()
+		NSLayoutConstraint.deactivate(singlePickerViewConstraints)
+		singlePickerViewConstraints = []
+	}
 }
 
-// MARK: - private extension for initializing elements
-
-fileprivate extension UIButton {
-    
-    static func singleChoiceButton() -> UIButton {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.shadowRadius = 0.5
-        button.backgroundColor = .white
-        button.setTitleColor(.gray, for: .normal)
-        button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = .zero
-        button.layer.shadowOpacity = 1
-        button.setImage(UIImage(named: "button_arrow"), for: .normal)
-        button.titleLabel?.textAlignment = .left
-        button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        button.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        button.imageView?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
-        return button
-    }
-    
-    func setContent(_ content: UserProfileElementsView.Model.Content) {
-        let title = content.text == nil ? content.placeholder : content.text
-        setTitle(title, for: .normal)
-    }
+fileprivate extension UserProfileElementsView {
+	
+	func view(for element: Element) -> UIView {
+		switch element {
+		case .profileImage: return pictureButton
+		case .displayName: return displayNameField
+		case .realName: return realNameField
+		case .location: return locationField
+		case .bDay: return bDayButton
+		case .gender: return genderButton
+		case .ethnicity: return ethnicityButton
+		case .religion: return religionButton
+		case .figure: return figureButton
+		case .maritalStatus: return maritalStatusButton
+		case .height: return heightField
+		case .occupation: return occupationField
+		case .aboutMe: return aboutMeField
+		case .doneButton: return doneButton
+		}
+	}
 }
 
-fileprivate extension UITextField {
-    
-    static func singleLineTextField() -> UITextField {
-        let field = UITextField()
-        field.translatesAutoresizingMaskIntoConstraints = false
-        field.layer.shadowRadius = 0.5
-        field.backgroundColor = .white
-        field.layer.sublayerTransform = CATransform3DMakeTranslation(5, 0, 0);
-        field.textColor = .gray
-        field.layer.shadowColor = UIColor.black.cgColor
-        field.layer.shadowOffset = .zero
-        field.layer.shadowOpacity = 1
-        return field
-    }
-    
-    func setContent(_ content: UserProfileElementsView.Model.Content) {
-        text = content.text
-        placeholder = content.placeholder
-    }
-}
+// MARK: - button actions
 
-fileprivate extension UITextView {
-    
-    static func configuredTextView() -> UITextView {
-        let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.backgroundColor = .white
-        textView.layer.shadowRadius = 0.5
-        textView.textColor = .gray
-        textView.layer.shadowColor = UIColor.black.cgColor
-        textView.layer.shadowOffset = .zero
-        textView.layer.shadowOpacity = 1
-        textView.clipsToBounds = false
-        return textView
+fileprivate extension UserProfileElementsView {
+	
+	@objc func pictureButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.profileImage(sender.image(for: .normal)))
     }
-    
-    func setContent(_ content: UserProfileElementsView.Model.Content) {
-        let title = content.text == nil ? content.placeholder : content.text
-        text = title
+	
+	@objc func bDayButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.bDay((text: sender.title(for: .normal), placeholder: nil)))
+    }
+	
+	@objc func genderButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.gender((text: sender.title(for: .normal), placeholder: nil)))
+    }
+	
+	@objc func maritalStatusButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.maritalStatus((text: sender.title(for: .normal), placeholder: nil)))
+    }
+	
+	@objc func ethnicityButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.ethnicity((text: sender.title(for: .normal), placeholder: nil)))
+    }
+	
+	@objc func religionButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.religion((text: sender.title(for: .normal), placeholder: nil)))
+    }
+	
+	@objc func figureButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.figure((text: sender.title(for: .normal), placeholder: nil)))
+    }
+	
+	@objc func doneButtonDidTap(_ sender: UserProfileButton) {
+		elementInteractionClosure(.doneButton((text: sender.title(for: .normal), placeholder: nil)))
     }
 }
 
@@ -291,4 +295,16 @@ fileprivate extension UserProfileElementsView {
             doneButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2 * Constants.verticalSpacing),
         ])
     }
+	
+	func setupSinglePickerLayout(with relatedView: UIView) {
+		addSubview(singlePickerView)
+		NSLayoutConstraint.deactivate(singlePickerViewConstraints)
+		singlePickerViewConstraints = [
+			singlePickerView.topAnchor.constraint(equalTo: relatedView.bottomAnchor),
+			singlePickerView.leadingAnchor.constraint(equalTo: relatedView.leadingAnchor),
+			singlePickerView.trailingAnchor.constraint(equalTo: relatedView.trailingAnchor),
+			singlePickerView.heightAnchor.constraint(equalToConstant: Constants.singleChoiceViewHeight)
+		]
+		NSLayoutConstraint.activate(singlePickerViewConstraints)
+	}
 }

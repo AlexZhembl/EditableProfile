@@ -8,16 +8,23 @@
 import UIKit
 
 protocol UserProfileView: class {
-    func setupProfileElements(with model: UserProfileElementsView.Model)
+	typealias Element = UserProfileElementsView.Element
+	
+	func updateElementsView(with elements: [Element])
+	func showSingleChoicePicker(for element: Element, with choices: [SingleChoicePickerViewChoicable])
+	func dismissSinglePicker()
 }
 
 final class UserProfileViewController: UIViewController {
     
     private let viewModel: UserProfileViewModel
     private lazy var elementsView: UserProfileElementsView = {
-        let elementsView = UserProfileElementsView(pictureButtonAction: { [weak self] in
-            self?.viewModel.profilePictureDidTap()
-        })
+		let elementsView = UserProfileElementsView(elementInteractionClosure: { [weak self] element in
+				self?.viewModel.didInteractElement(element)
+			},
+			singlePickerClosure: { [weak self] choice, element in
+				self?.viewModel.singleChoicePickerDidSelect(choice, for: element)
+		})
         elementsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(elementsView)
         NSLayoutConstraint.activate([
@@ -56,7 +63,15 @@ final class UserProfileViewController: UIViewController {
 }
 
 extension UserProfileViewController: UserProfileView {
-    func setupProfileElements(with model: UserProfileElementsView.Model) {
-        elementsView.setup(with: model)
-    }
+	func updateElementsView(with elements: [Element]) {
+		elementsView.updateView(with: elements)
+	}
+	
+	func showSingleChoicePicker(for element: Element, with choices: [SingleChoicePickerViewChoicable]) {
+		elementsView.setupSingleChoicePicker(for: element, with: choices)
+	}
+	
+	func dismissSinglePicker() {
+		elementsView.dismissSinglePicker()
+	}
 }
