@@ -13,10 +13,6 @@ protocol RootViewModel {
     func editProfileDidTap()
 }
 
-protocol RootViewModelSettings  {
-    var isUserRegistered: Bool { get }
-}
-
 final class RootViewModelImpl: RootViewModel {
     
     weak var view: RootView?

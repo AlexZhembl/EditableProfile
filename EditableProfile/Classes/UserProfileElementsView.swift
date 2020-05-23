@@ -107,20 +107,23 @@ final class UserProfileElementsView: UIView {
 	func updateView(with elements: [Element]) {
 		elements.forEach { element in
 			switch element {
-			case .profileImage(let image): pictureButton.setContent(image)
-			case .displayName(let text): displayNameField.setContent(text)
-			case .realName(let text): realNameField.setContent(text)
-			case .location(let location): locationField.setContent(location)
-			case .bDay(let date): bDayButton.setContent(date)
-			case .gender(let attr): genderButton.setContent(attr)
-			case .ethnicity(let attr): ethnicityButton.setContent(attr)
-			case .religion(let attr): religionButton.setContent(attr)
-			case .figure(let attr): figureButton.setContent(attr)
-			case .maritalStatus(let attr): maritalStatusButton.setContent(attr)
-			case .height(let text, let isEnabled): heightField.setContent(text)
-			case .occupation(let text): occupationField.setContent(text)
-			case .aboutMe(let text): aboutMeField.setContent(text)
-			case .doneButton(let text): doneButton.setContent(text)
+			case .profileImage(let image): 		 pictureButton.setContent(image)
+			case .displayName(let text): 		 displayNameField.setContent(text)
+			case .realName(let text): 		  	 realNameField.setContent(text)
+			case .location(let location): 		 locationField.setContent(location)
+			case .bDay(let date):			     bDayButton.setContent(date)
+			case .gender(let attr): 			 genderButton.setContent(attr)
+			case .ethnicity(let attr): 			 ethnicityButton.setContent(attr)
+			case .religion(let attr): 			 religionButton.setContent(attr)
+			case .figure(let attr): 			 figureButton.setContent(attr)
+			case .maritalStatus(let attr): 		 maritalStatusButton.setContent(attr)
+			case .occupation(let text): 		 occupationField.setContent(text)
+			case .aboutMe(let text): 			 aboutMeField.setContent(text)
+			case .doneButton(let text): 		 doneButton.setContent(text)
+			case .height(let text, let isEnabled):
+				heightField.setContent(text)
+				heightField.keyboardType = .numberPad
+				heightField.isUserInteractionEnabled = isEnabled
 			}
 		}
 	}
@@ -163,46 +166,70 @@ fileprivate extension UserProfileElementsView {
 	
 	func view(for element: Element) -> UIView {
 		switch element {
-		case .profileImage: return pictureButton
-		case .displayName: return displayNameField
-		case .realName: return realNameField
-		case .location: return locationField
-		case .bDay: return bDayButton
-		case .gender: return genderButton
-		case .ethnicity: return ethnicityButton
-		case .religion: return religionButton
-		case .figure: return figureButton
-		case .maritalStatus: return maritalStatusButton
-		case .height: return heightField
-		case .occupation: return occupationField
-		case .aboutMe: return aboutMeField
-		case .doneButton: return doneButton
+		case .profileImage: 	return pictureButton
+		case .displayName: 		return displayNameField
+		case .realName: 		return realNameField
+		case .location:		    return locationField
+		case .bDay: 			return bDayButton
+		case .gender: 			return genderButton
+		case .ethnicity: 		return ethnicityButton
+		case .religion: 		return religionButton
+		case .figure: 			return figureButton
+		case .maritalStatus: 	return maritalStatusButton
+		case .height: 			return heightField
+		case .occupation: 		return occupationField
+		case .aboutMe: 			return aboutMeField
+		case .doneButton: 		return doneButton
 		}
 	}
 	
 	func element(for subview: UIView) -> Element? {
 		switch subview {
-		case pictureButton: return .profileImage(nil)
-		case displayNameField: return .displayName(nil)
-		case realNameField: return .realName(nil)
-		case locationField: return .location(nil)
-		case bDayButton: return .bDay(nil)
-		case genderButton: return .gender(nil)
-		case ethnicityButton: return .ethnicity(nil)
-		case religionButton: return .religion(nil)
-		case figureButton: return .figure(nil)
-		case maritalStatusButton: return .maritalStatus(nil)
-		case heightField: return .height(nil, isEnabled: heightField.isEnabled)
-		case occupationField: return .occupation(nil)
-		case aboutMeField: return .aboutMe(nil)
-		case doneButton: return .doneButton(nil)
-		default:
-			return nil
+		case pictureButton: 		return .profileImage(nil)
+		case displayNameField: 		return .displayName(nil)
+		case realNameField: 		return .realName(nil)
+		case locationField: 		return .location(nil)
+		case bDayButton: 			return .bDay(nil)
+		case genderButton: 			return .gender(nil)
+		case ethnicityButton: 		return .ethnicity(nil)
+		case religionButton: 		return .religion(nil)
+		case figureButton: 			return .figure(nil)
+		case maritalStatusButton: 	return .maritalStatus(nil)
+		case heightField: 			return .height(nil, isEnabled: heightField.isEnabled)
+		case occupationField: 		return .occupation(nil)
+		case aboutMeField: 			return .aboutMe(nil)
+		case doneButton: 			return .doneButton(nil)
+		default:					return nil
 		}
+	}
+	
+	@objc func buttonDidTap(_ sender: UIButton) {
+		guard let element = element(for: sender) else {
+			assertionFailure("Could not find element for subview")
+			return
+		}
+		endEditing(true)
+		scrollViewToTop(sender)
+		elementInteractionClosure(element, nil)
+    }
+	
+	private func scrollViewToTop(_ subview: UIView) {
+		// MARK: - Just add some ux. Usually we should count
+		// different betwen keyboard height and the current frame
+		// then calculate which offset could be used to place our input view
+		// to thee top of keyboard. TODO: if I'll have time
+		let convertedFrame = contentView.convert(subview.frame, from: subview.superview)
+		let bottomPoint = CGPoint(x: scrollView.contentOffset.x,
+								  y: convertedFrame.minY)
+		scrollView.setContentOffset(bottomPoint, animated: true)
 	}
 }
 
 extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
+	
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+		scrollViewToTop(textField)
+	}
 	
 	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 		let changedText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
@@ -219,13 +246,22 @@ extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
 		return true
 	}
 	
-	func textFieldDidEndEditing(_ textField: UITextField) {
-		textField.resignFirstResponder()
-		guard let element = element(for: textField) else {
-			assertionFailure("Could not find element for subview")
-			return
-		}
-		elementInteractionClosure(element, textField.text)
+//	func textFieldDidEndEditing(_ textField: UITextField) {
+//		textField.resignFirstResponder()
+//		guard let element = element(for: textField) else {
+//			assertionFailure("Could not find element for subview")
+//			return
+//		}
+//		elementInteractionClosure(element, textField.text)
+//	}
+	
+	func textViewDidBeginEditing(_ textView: UITextView) {
+		scrollViewToTop(textView)
+	}
+	
+	func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+		textView.resignFirstResponder()
+		return true
 	}
 	
 	func textViewDidEndEditing(_ textView: UITextView) {
@@ -235,19 +271,6 @@ extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
 		}
 		elementInteractionClosure(element, textView.text)
 	}
-	
-	func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-		textView.resignFirstResponder()
-		return true
-	}
-	
-	@objc func buttonDidTap(_ sender: UIButton) {
-		guard let element = element(for: sender) else {
-			assertionFailure("Could not find element for subview")
-			return
-		}
-		elementInteractionClosure(element, nil)
-    }
 }
 
 extension UserProfileElementsView: UIScrollViewDelegate {

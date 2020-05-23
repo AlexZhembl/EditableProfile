@@ -1,5 +1,5 @@
 //
-//  UserProfileElementsValidator.swift
+//  UserProfileModelFrabric.swift
 //  EditableProfile
 //
 //  Created by Aliaksei Zhemblouski on 5/23/20.
@@ -7,12 +7,13 @@
 
 import Foundation
 
-protocol UserProfileElementsValidator {
+protocol UserProfileModelFrabric {
 	func isElementValid(_ element: UserProfileElementsView.Element) -> Bool
 	func error(for element: UserProfileElementsView.Element) -> String
+	func createModel(from elements: Set<UserProfileElementsView.Element>) throws -> UserModel
 }
 
-final class UserProfileElementsValidatorImpl: UserProfileElementsValidator {
+final class UserProfileModelFrabricImpl: UserProfileModelFrabric {
 	
 	func isElementValid(_ element: UserProfileElementsView.Element) -> Bool {
 		return element.validate()
@@ -20,6 +21,40 @@ final class UserProfileElementsValidatorImpl: UserProfileElementsValidator {
 	
 	func error(for element: UserProfileElementsView.Element) -> String {
 		return element.errorString
+	}
+	
+	func createModel(from elements: Set<UserProfileElementsView.Element>) throws -> UserModel {
+		let mandatory = UserProfileElementsView.Element.mandatory
+		guard mandatory.isSubset(of: elements) else {
+			throw NSError(domain: "", code: -1, userInfo: ["reason": "Elements array not contains mandatory fields"])
+		}
+
+		return UserModel(elements: elements)
+	}
+}
+
+fileprivate extension UserModel {
+	
+	convenience init(elements: Set<UserProfileElementsView.Element>) {
+		self.init()
+		elements.forEach { element in
+			switch element {
+			case .profileImage(let image): 	picture = image
+			case .displayName(let content): displayName = content?.text
+			case .realName(let content): 	realName = content?.text
+			case .location(let content): 	location = content?.loc
+			case .bDay(let date):		    bDay = date?.date
+			case .gender(let attr): 		gender = attr?.attr
+			case .ethnicity(let attr): 		ethnicity = attr?.attr
+			case .religion(let attr): 		religion = attr?.attr
+			case .figure(let attr): 		figure = attr?.attr
+			case .maritalStatus(let attr): 	maritalStatus = attr?.attr
+			case .height(let content, _):   height = content?.text
+			case .occupation(let content):  occupation = content?.text
+			case .aboutMe(let content): 	aboutMe = content?.text
+			case .doneButton(_): 			break
+			}
+		}
 	}
 }
 
@@ -33,13 +68,12 @@ fileprivate extension UserProfileElementsView.Element {
 															 upper: Date()))
 	}
 	
+	static var mandatory: Set<UserProfileElementsView.Element> {
+		return [.profileImage(nil), .displayName(nil), .location(nil), .bDay(nil), .gender(nil)]
+	}
+	
 	var isMandatory: Bool {
-		switch self {
-		case .profileImage, .displayName, .location, .bDay, .gender:
-			return true
-		default:
-			return false
-		}
+		return UserProfileElementsView.Element.mandatory.contains(self)
 	}
 	
 	func validate() -> Bool {
@@ -114,7 +148,7 @@ fileprivate extension UserProfileElementsView.Element {
 			return "Choose one of the options"
 			
 		case .height:
-			return "Enter correct Int value"
+			return "Enter correct Int value (50-250)"
 			
 		case .aboutMe:
 			return "Text should be in range 1...5000"

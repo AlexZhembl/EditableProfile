@@ -12,6 +12,7 @@ protocol UserProfileViewModel {
 	func didInteractElement(_ element: UserProfileElementsView.Element, value: String?)
 	func singleChoicePickerDidSelect(_ choice: SingleChoicePickerViewChoicable, for element: UserProfileElementsView.Element)
 	func datePickerDidSelect(date: Date, for element: UserProfileElementsView.Element)
+	
 }
 
 final class UserProfileViewModelImpl: UserProfileViewModel {
@@ -20,7 +21,7 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
     private let router: UserProfileRouter
     private let attributesAndLocationsFetcher: UserProfileAttributesAndLocationsFetcher
 	private let userModelProvider: UserModelProvider
-	private let elementsValidator: UserProfileElementsValidator
+	private let modelFabric: UserProfileModelFrabric
 	weak var view: UserProfileView?
 	  
 	private var attributes: UserProfileAttributesResponse?
@@ -34,11 +35,11 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 	init(router: UserProfileRouter,
 		 attributesAndLocationsFetcher: UserProfileAttributesAndLocationsFetcher,
 		 userModelProvider: UserModelProvider,
-		 elementsValidator: UserProfileElementsValidator) {
+		 modelFabric: UserProfileModelFrabric) {
         self.router = router
         self.attributesAndLocationsFetcher = attributesAndLocationsFetcher
 		self.userModelProvider = userModelProvider
-		self.elementsValidator = elementsValidator
+		self.modelFabric = modelFabric
     }
     
     func viewDidLoad() {
@@ -62,10 +63,10 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 						.religion((attr: model?.religion, placeholder: "Religion")),
 						.figure((attr: model?.figure, placeholder: "Figure")),
 						.maritalStatus((attr: model?.maritalStatus, placeholder: "Material status")),
-						.height((text: model?.height, placeholder: "Height"), isEnabled: true),
+						.height((text: model?.height, placeholder: "Height"), isEnabled: model == nil),
 						.occupation((text: model?.occupation, placeholder: "Occupation")),
 						.aboutMe((text: model?.aboutMe, placeholder: "About me")),
-						.doneButton((text: "Save/register", placeholder: ""))]
+						.doneButton((text: model == nil ? "Register" : "Update", placeholder: ""))]
 		view?.updateElementsView(with: Array(viewElements))
     }
 	
@@ -94,13 +95,13 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 			let realQuey = query.trimmingCharacters(in: .whitespacesAndNewlines)
 			let filtered = realQuey.count == 0 ?
 				locations?.cities : locations?.cities.filter { $0.city.starts(with: query) }
-			viewElements.update(with: element)
 			if let cities = filtered, cities.count > 0 {
 				view?.showSingleChoicePicker(for: element, with: cities)
 			}
 			else {
 				view?.dismissPicker()
 			}
+			updElement = .location(nil)
 		case .bDay:
 			view?.showDatePicker(for: element)
 		case .gender:
@@ -120,10 +121,12 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 		case .aboutMe:
 			updElement = .aboutMe((value, nil))
 		case .doneButton:
-			viewElements.forEach { el in
-				if !elementsValidator.isElementValid(el) {
-					view?.showError(for: el, error: elementsValidator.error(for: el))
-				}
+			let problemElements = viewElements.filter { !modelFabric.isElementValid($0) }
+			problemElements.forEach { view?.showError(for: $0, error: modelFabric.error(for: $0)) }
+			if problemElements.count == 0,
+				let model = try? modelFabric.createModel(from: viewElements) {
+				userModelProvider.syncUserModel(model)
+				router.dismissViewController()
 			}
 		}
 		

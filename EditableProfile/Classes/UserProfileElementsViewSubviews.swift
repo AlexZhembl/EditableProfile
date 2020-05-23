@@ -203,7 +203,6 @@ final class UserProfileTextView: UITextView, UserProfileSubview {
 		layer.shadowOffset = .zero
 		layer.shadowOpacity = 1
 		clipsToBounds = false
-		returnKeyType = .done
 		self.delegate = delegate
 	}
 	

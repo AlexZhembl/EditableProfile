@@ -9,6 +9,7 @@ import UIKit
 
 protocol UserProfileRouter {
     func presentImagePicker(with completion: @escaping (UIImage?) -> Void)
+	func dismissViewController()
 }
 
 final class UserProfileRouterImpl: UserProfileRouter {
@@ -29,4 +30,8 @@ final class UserProfileRouterImpl: UserProfileRouter {
         
         imagePicker.showPicker(from: presentingController, completion: completion)
     }
+	
+	func dismissViewController() {
+		presentingController()?.dismiss(animated: true, completion: nil)
+	}
 }

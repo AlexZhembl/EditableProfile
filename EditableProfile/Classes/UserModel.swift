@@ -9,16 +9,16 @@ import UIKit
 
 final class UserModel: Codable {
 	var picture: UIImage?
-	var displayName: String
+	var displayName: String?
 	var realName: String?
-	var location: UserLocation
-	var bDay: Date
-	var gender: UserAttribute
+	var location: UserLocation?
+	var bDay: Date?
+	var gender: UserAttribute?
 	var ethnicity: UserAttribute?
 	var religion: UserAttribute?
 	var figure: UserAttribute?
-	var maritalStatus: UserAttribute
-	var height: String
+	var maritalStatus: UserAttribute?
+	var height: String?
 	var occupation: String?
 	var aboutMe: String?
 	
@@ -40,12 +40,12 @@ final class UserModel: Codable {
 	
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
-		displayName = try container.decode(String.self, forKey: .displayName)
-		location = try container.decode(UserLocation.self, forKey: .location)
-		bDay = try container.decode(Date.self, forKey: .bDay)
-		gender = try container.decode(UserAttribute.self, forKey: .gender)
-		maritalStatus = try container.decode(UserAttribute.self, forKey: .maritalStatus)
-		height = try container.decode(String.self, forKey: .height)
+		displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
+		location = try container.decodeIfPresent(UserLocation.self, forKey: .location)
+		bDay = try container.decodeIfPresent(Date.self, forKey: .bDay)
+		gender = try container.decodeIfPresent(UserAttribute.self, forKey: .gender)
+		maritalStatus = try container.decodeIfPresent(UserAttribute.self, forKey: .maritalStatus)
+		height = try container.decodeIfPresent(String.self, forKey: .height)
 		
 		realName = try container.decodeIfPresent(String.self, forKey: .realName)
 		ethnicity = try container.decodeIfPresent(UserAttribute.self, forKey: .ethnicity)
@@ -64,12 +64,12 @@ final class UserModel: Codable {
 	
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(displayName, forKey: .displayName)
-		try container.encode(location, forKey: .location)
-		try container.encode(bDay, forKey: .bDay)
-		try container.encode(gender, forKey: .gender)
-		try container.encode(maritalStatus, forKey: .maritalStatus)
-		try container.encode(height, forKey: .height)
+		try container.encodeIfPresent(displayName, forKey: .displayName)
+		try container.encodeIfPresent(location, forKey: .location)
+		try container.encodeIfPresent(bDay, forKey: .bDay)
+		try container.encodeIfPresent(gender, forKey: .gender)
+		try container.encodeIfPresent(maritalStatus, forKey: .maritalStatus)
+		try container.encodeIfPresent(height, forKey: .height)
 		
 		try container.encodeIfPresent(realName, forKey: .realName)
 		try container.encodeIfPresent(ethnicity, forKey: .ethnicity)
@@ -79,6 +79,22 @@ final class UserModel: Codable {
 		try container.encodeIfPresent(aboutMe, forKey: .aboutMe)
 		
 		try container.encodeIfPresent(picture?.pngData(), forKey: .picture)
+	}
+	
+	init() {
+		self.picture = nil
+		self.displayName = nil
+		self.realName = nil
+		self.location = nil
+		self.bDay = nil
+		self.gender = nil
+		self.ethnicity = nil
+		self.religion = nil
+		self.figure = nil
+		self.maritalStatus = nil
+		self.height = nil
+		self.occupation = nil
+		self.aboutMe = nil
 	}
 }
 

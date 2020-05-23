@@ -10,8 +10,8 @@
 		30DA8A68728280708AF27B7A /* Pods_EditableProfileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24CD418010A350A0D42B8191 /* Pods_EditableProfileTests.framework */; };
 		AC371BCF247420CF00B35BB1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC371BCE247420CF00B35BB1 /* Assets.xcassets */; };
 		AC371BD2247420CF00B35BB1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC371BD0247420CF00B35BB1 /* LaunchScreen.storyboard */; };
-		AC371BDD247420CF00B35BB1 /* EditableProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC371BDC247420CF00B35BB1 /* EditableProfileTests.swift */; };
-		AC371BE8247420CF00B35BB1 /* EditableProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC371BE7247420CF00B35BB1 /* EditableProfileUITests.swift */; };
+		AC371BDD247420CF00B35BB1 /* RootTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC371BDC247420CF00B35BB1 /* RootTests.swift */; };
+		AC371BE8247420CF00B35BB1 /* RootUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC371BE7247420CF00B35BB1 /* RootUITests.swift */; };
 		AC6B61F924751F2800971D2F /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B61F324751F2800971D2F /* RootViewController.swift */; };
 		AC6B61FA24751F2800971D2F /* RootRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B61F424751F2800971D2F /* RootRouter.swift */; };
 		AC6B61FB24751F2800971D2F /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B61F524751F2800971D2F /* RootViewModel.swift */; };
@@ -32,7 +32,10 @@
 		AC6B621D247717F000971D2F /* UserProfileElementsViewSubviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */; };
 		AC6B621F2477C61F00971D2F /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621E2477C61F00971D2F /* UserModel.swift */; };
 		AC6B62222477D50600971D2F /* UserModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B62212477D50600971D2F /* UserModelProvider.swift */; };
-		ACA54241247950A300A57CB1 /* UserProfileElementsValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA54240247950A300A57CB1 /* UserProfileElementsValidator.swift */; };
+		ACA542BF247978E000A57CB1 /* UserProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542BE247978E000A57CB1 /* UserProfileUITests.swift */; };
+		ACA542C124797E8D00A57CB1 /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */; };
+		ACA542C3247983B500A57CB1 /* UserModelProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */; };
+		ACA542C52479A00600A57CB1 /* UserProfileModelFrabric.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */; };
 		CF89825B659A5986BCA76560 /* Pods_EditableProfile_EditableProfileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F476D0A074B939C3909B56CE /* Pods_EditableProfile_EditableProfileUITests.framework */; };
 		F00ABD61B5DBFBF191A3C147 /* Pods_EditableProfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8829F918D2810955CFF2CF /* Pods_EditableProfile.framework */; };
 /* End PBXBuildFile section */
@@ -67,10 +70,10 @@
 		AC371BD1247420CF00B35BB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AC371BD3247420CF00B35BB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC371BD8247420CF00B35BB1 /* EditableProfileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditableProfileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC371BDC247420CF00B35BB1 /* EditableProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableProfileTests.swift; sourceTree = "<group>"; };
+		AC371BDC247420CF00B35BB1 /* RootTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTests.swift; sourceTree = "<group>"; };
 		AC371BDE247420CF00B35BB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC371BE3247420CF00B35BB1 /* EditableProfileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditableProfileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC371BE7247420CF00B35BB1 /* EditableProfileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableProfileUITests.swift; sourceTree = "<group>"; };
+		AC371BE7247420CF00B35BB1 /* RootUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootUITests.swift; sourceTree = "<group>"; };
 		AC371BE9247420CF00B35BB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC6B61F324751F2800971D2F /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		AC6B61F424751F2800971D2F /* RootRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
@@ -92,7 +95,10 @@
 		AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileElementsViewSubviews.swift; sourceTree = "<group>"; };
 		AC6B621E2477C61F00971D2F /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		AC6B62212477D50600971D2F /* UserModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelProvider.swift; sourceTree = "<group>"; };
-		ACA54240247950A300A57CB1 /* UserProfileElementsValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileElementsValidator.swift; sourceTree = "<group>"; };
+		ACA542BE247978E000A57CB1 /* UserProfileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileUITests.swift; sourceTree = "<group>"; };
+		ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
+		ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelProviderTests.swift; sourceTree = "<group>"; };
+		ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModelFrabric.swift; sourceTree = "<group>"; };
 		AFF0D93AD119CB61AC98EB1A /* Pods-EditableProfile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EditableProfile.debug.xcconfig"; path = "Target Support Files/Pods-EditableProfile/Pods-EditableProfile.debug.xcconfig"; sourceTree = "<group>"; };
 		F476D0A074B939C3909B56CE /* Pods_EditableProfile_EditableProfileUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EditableProfile_EditableProfileUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -161,7 +167,9 @@
 		AC371BDB247420CF00B35BB1 /* EditableProfileTests */ = {
 			isa = PBXGroup;
 			children = (
-				AC371BDC247420CF00B35BB1 /* EditableProfileTests.swift */,
+				AC371BDC247420CF00B35BB1 /* RootTests.swift */,
+				ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */,
+				ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */,
 				AC371BDE247420CF00B35BB1 /* Info.plist */,
 			);
 			path = EditableProfileTests;
@@ -170,7 +178,8 @@
 		AC371BE6247420CF00B35BB1 /* EditableProfileUITests */ = {
 			isa = PBXGroup;
 			children = (
-				AC371BE7247420CF00B35BB1 /* EditableProfileUITests.swift */,
+				AC371BE7247420CF00B35BB1 /* RootUITests.swift */,
+				ACA542BE247978E000A57CB1 /* UserProfileUITests.swift */,
 				AC371BE9247420CF00B35BB1 /* Info.plist */,
 			);
 			path = EditableProfileUITests;
@@ -210,7 +219,7 @@
 				AC6B62112475860700971D2F /* UserProfileRouter.swift */,
 				AC6B620C2475339900971D2F /* Views */,
 				AC6B620F2475809800971D2F /* ImagePicker.swift */,
-				ACA54240247950A300A57CB1 /* UserProfileElementsValidator.swift */,
+				ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */,
 				AC6B62172476B83900971D2F /* AttributesAndLocationsFetcher */,
 			);
 			name = UserProfile;
@@ -297,6 +306,7 @@
 				AC371BD4247420CF00B35BB1 /* Sources */,
 				AC371BD5247420CF00B35BB1 /* Frameworks */,
 				AC371BD6247420CF00B35BB1 /* Resources */,
+				6E8965AFB5CBCC378773F096 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -480,6 +490,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6E8965AFB5CBCC378773F096 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EditableProfileTests/Pods-EditableProfileTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-EditableProfileTests/Pods-EditableProfileTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EditableProfileTests/Pods-EditableProfileTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		EE22931F0A3C07B456659753 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -514,7 +541,6 @@
 				AC6B61FE24751F2800971D2F /* SettingsStorage.swift in Sources */,
 				AC6B61F924751F2800971D2F /* RootViewController.swift in Sources */,
 				AC6B620E247539F000971D2F /* UserProfileElementsView.swift in Sources */,
-				ACA54241247950A300A57CB1 /* UserProfileElementsValidator.swift in Sources */,
 				AC6B620B2475326200971D2F /* UserProfileViewModel.swift in Sources */,
 				AC6B62102475809800971D2F /* ImagePicker.swift in Sources */,
 				AC6B621D247717F000971D2F /* UserProfileElementsViewSubviews.swift in Sources */,
@@ -522,6 +548,7 @@
 				AC6B62122475860700971D2F /* UserProfileRouter.swift in Sources */,
 				AC6B621F2477C61F00971D2F /* UserModel.swift in Sources */,
 				AC6B621B2476C39000971D2F /* SingleChoicePickerView.swift in Sources */,
+				ACA542C52479A00600A57CB1 /* UserProfileModelFrabric.swift in Sources */,
 				AC6B62222477D50600971D2F /* UserModelProvider.swift in Sources */,
 				AC6B61FB24751F2800971D2F /* RootViewModel.swift in Sources */,
 				AC6B621424769C2000971D2F /* UserProfileAttributesAndLocationsFetcher.swift in Sources */,
@@ -532,7 +559,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC371BDD247420CF00B35BB1 /* EditableProfileTests.swift in Sources */,
+				ACA542C124797E8D00A57CB1 /* UserProfileTests.swift in Sources */,
+				AC371BDD247420CF00B35BB1 /* RootTests.swift in Sources */,
+				ACA542C3247983B500A57CB1 /* UserModelProviderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,7 +569,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC371BE8247420CF00B35BB1 /* EditableProfileUITests.swift in Sources */,
+				ACA542BF247978E000A57CB1 /* UserProfileUITests.swift in Sources */,
+				AC371BE8247420CF00B35BB1 /* RootUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

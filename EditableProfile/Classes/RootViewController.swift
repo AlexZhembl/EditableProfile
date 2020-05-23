@@ -56,8 +56,8 @@ final class RootViewController: UIViewController {
 
 extension RootViewController: RootView {
     
-    func createButtons(register: RootButtonModel, changeProfile: RootButtonModel) {
-        func button(model: RootButtonModel, action: Selector) -> UIView {
+	func createButtons(register: RootButtonModel, changeProfile: RootButtonModel) {
+        func button(model: RootButtonModel, action: Selector, ai: String) -> UIView {
             let button = UIButton(type: .custom)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setTitle(model.title, for: .normal)
@@ -66,11 +66,13 @@ extension RootViewController: RootView {
             button.addTarget(self, action: action, for: .touchUpInside)
             button.backgroundColor = UIColor.random
             button.isHidden = model.isHidden
+			button.accessibilityIdentifier = ai
             return button
         }
 
-        let contentView = UIStackView(arrangedSubviews: [button(model: register, action: #selector(registerButtonDidTap)),
-                                                         button(model: changeProfile, action: #selector(changeProfileButtonDidTap))])
+		let buttons = [button(model: register, action: #selector(registerButtonDidTap), ai: "registerButton"),
+					   button(model: changeProfile, action: #selector(changeProfileButtonDidTap), ai: "changeProfileButton")]
+		let contentView = UIStackView(arrangedSubviews: buttons)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.distribution = .fillEqually
         contentView.axis = .horizontal

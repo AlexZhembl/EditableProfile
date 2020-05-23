@@ -9,11 +9,16 @@ target 'EditableProfile' do
 
   target 'EditableProfileTests' do
     inherit! :search_paths
-    # Pods for testing
+
+    pod 'Swinject'
+    pod 'Quick'
+    pod 'Nimble'
   end
 
   target 'EditableProfileUITests' do
-    # Pods for testing
+    pod 'Swinject'
+    pod 'Quick'
+    pod 'Nimble'
   end
 
 end

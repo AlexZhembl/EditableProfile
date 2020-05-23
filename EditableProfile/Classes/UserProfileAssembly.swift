@@ -21,7 +21,7 @@ class UserProfileAssembly: Assembly {
             UserProfileViewModelImpl(router: r.resolve(UserProfileRouter.self)!,
                                      attributesAndLocationsFetcher: r.resolve(UserProfileAttributesAndLocationsFetcher.self)!,
 									 userModelProvider: r.resolve(UserModelProvider.self)!,
-									 elementsValidator: r.resolve(UserProfileElementsValidator.self)!)
+									 modelFabric: r.resolve(UserProfileModelFrabric.self)!)
         }
         
         container.register(UserProfileViewController.self) { r in
@@ -43,8 +43,8 @@ class UserProfileAssembly: Assembly {
 			UserModelProviderImpl(settings: r.resolve(SettingsStorage.self)!)
 		}
 		
-		container.register(UserProfileElementsValidator.self) { r in
-			UserProfileElementsValidatorImpl()
+		container.register(UserProfileModelFrabric.self) { r in
+			UserProfileModelFrabricImpl()
 		}
     }
 }
