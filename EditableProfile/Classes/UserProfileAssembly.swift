@@ -19,7 +19,9 @@ class UserProfileAssembly: Assembly {
         
         container.register(UserProfileViewModelImpl.self) { r in
             UserProfileViewModelImpl(router: r.resolve(UserProfileRouter.self)!,
-                                     attributesAndLocationsFetcher: r.resolve(UserProfileAttributesAndLocationsFetcher.self)!)
+                                     attributesAndLocationsFetcher: r.resolve(UserProfileAttributesAndLocationsFetcher.self)!,
+									 userModelProvider: r.resolve(UserModelProvider.self)!,
+									 elementsValidator: r.resolve(UserProfileElementsValidator.self)!)
         }
         
         container.register(UserProfileViewController.self) { r in
@@ -36,5 +38,13 @@ class UserProfileAssembly: Assembly {
         container.register(UserProfileAttributesAndLocationsFetcher.self) { r in
             UserProfileAttributesAndLocationsFetcherImpl(httpFabric: r.resolve(HTTPFabric.self)!)
         }
+		
+		container.register(UserModelProvider.self) { r in
+			UserModelProviderImpl(settings: r.resolve(SettingsStorage.self)!)
+		}
+		
+		container.register(UserProfileElementsValidator.self) { r in
+			UserProfileElementsValidatorImpl()
+		}
     }
 }

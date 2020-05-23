@@ -18,7 +18,7 @@ class RootAssembly: Assembly {
         }
         
         container.register(RootViewModelImpl.self) { r in
-            RootViewModelImpl(settings: r.resolve(SettingsStorage.self)!, router: r.resolve(RootRouter.self)!)
+            RootViewModelImpl(userModelProvider: r.resolve(UserModelProvider.self)!, router: r.resolve(RootRouter.self)!)
         }
         
         container.register(RootViewController.self) { r in
@@ -27,5 +27,9 @@ class RootAssembly: Assembly {
             viewModel.view = controller
             return controller
         }.inObjectScope(.weak)
+		
+		container.register(UserModelProvider.self) { r in
+			UserModelProviderImpl(settings: r.resolve(SettingsStorage.self)!)
+		}
     }
 }

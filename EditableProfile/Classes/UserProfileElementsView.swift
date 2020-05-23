@@ -6,22 +6,26 @@
 //
 
 import UIKit
+import Toast_Swift
 
 final class UserProfileElementsView: UIView {
 	
 	enum Element {
-		typealias TextContent = (text: String?, placeholder: String?)
+		typealias TextContent = (text: String?, placeholder: String?)?
+		typealias AttributesContent = (attr: UserAttribute?, placeholder: String?)?
+		typealias LocationContent = (loc: UserLocation?, placeholder: String?)?
+		typealias DateContent = (date: Date?, placeholder: String?)?
 		
 		case profileImage(UIImage?)
 		case displayName(TextContent)
 		case realName(TextContent)
-		case location(TextContent)
-		case bDay(TextContent)
-		case gender(TextContent)
-		case ethnicity(TextContent)
-		case religion(TextContent)
-		case figure(TextContent)
-		case maritalStatus(TextContent)
+		case location(LocationContent)
+		case bDay(DateContent)
+		case gender(AttributesContent)
+		case ethnicity(AttributesContent)
+		case religion(AttributesContent)
+		case figure(AttributesContent)
+		case maritalStatus(AttributesContent)
 		case height(TextContent, isEnabled: Bool)
 		case occupation(TextContent)
 		case aboutMe(TextContent)
@@ -33,18 +37,19 @@ final class UserProfileElementsView: UIView {
         static let singleLineFiledHeight: CGFloat = 50.0
         static let singleChoiceButtonHeight: CGFloat = 50.0
         static let aboutMeViewHeight: CGFloat = 140.0
-        static let doneButtonSize = CGSize(width: 100, height: 50)
+        static let doneButtonSize = CGSize(width: 150, height: 50)
         
         static let containerViewInsets: UIEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 		static let verticalSpacing: CGFloat = 20.0
 		static let singleChoiceViewHeight: CGFloat = 150.0
     }
     
-    private let scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alwaysBounceVertical = true
         view.showsVerticalScrollIndicator = false
+		view.delegate = self
         return view
     }()
     private let contentView: UIView = {
@@ -54,41 +59,37 @@ final class UserProfileElementsView: UIView {
         return view
     }()
     private let pictureButton: UserProfilePictureButton = {
-		let button = UserProfilePictureButton(target: self, action: #selector(pictureButtonDidTap))
+		let button = UserProfilePictureButton(target: self, action: #selector(buttonDidTap))
         button.layer.cornerRadius = Constants.pictureButtonSize.width * 0.5
         
         return button
     }()
-    private let displayNameField = UserProfileTextField()
-    private let realNameField = UserProfileTextField()
-    private let locationField = UserProfileTextField()
-    private let bDayButton = UserProfileButton(target: self, action: #selector(bDayButtonDidTap))
-    private let genderButton = UserProfileButton(target: self, action: #selector(genderButtonDidTap))
-    private let maritalStatusButton = UserProfileButton(target: self, action: #selector(maritalStatusButtonDidTap))
-    private let ethnicityButton = UserProfileButton(target: self, action: #selector(ethnicityButtonDidTap))
-    private let religionButton = UserProfileButton(target: self, action: #selector(religionButtonDidTap))
-    private let figureButton = UserProfileButton(target: self, action: #selector(figureButtonDidTap))
-    private let heightField = UserProfileTextField()
-    private let occupationField = UserProfileTextField()
-    private let aboutMeField = UserProfileTextView()
-    private let doneButton: UserProfileButton = {
-        let button = UserProfileButton(target: self, action: #selector(doneButtonDidTap))
-        button.layer.cornerRadius = 8.0
-        button.backgroundColor = .blue
-        return button
-    }()
+    private lazy var displayNameField = UserProfileTextField(delegate: self)
+    private lazy var realNameField = UserProfileTextField(delegate: self)
+    private lazy var locationField = UserProfileLocationField(delegate: self)
+    private lazy var bDayButton = UserProfileDateButton(target: self, action: #selector(buttonDidTap))
+    private lazy var genderButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
+    private lazy var maritalStatusButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
+    private lazy var ethnicityButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
+    private lazy var religionButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
+    private lazy var figureButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
+    private lazy var heightField = UserProfileTextField(delegate: self)
+    private lazy var occupationField = UserProfileTextField(delegate: self)
+	private lazy var aboutMeField = UserProfileTextView(delegate: self)
+    private lazy var doneButton = UserProfileTextButton(target: self, action: #selector(buttonDidTap))
 	private lazy var singlePickerView = SingleChoicePickerView()
 	private var singlePickerViewConstraints: [NSLayoutConstraint] = []
     
-    private let elementInteractionClosure: (Element) -> Void
+    private let elementInteractionClosure: (Element, String?) -> Void
     private let singlePickerClosure: (SingleChoicePickerViewChoicable, Element) -> Void
 	
-	init(elementInteractionClosure: @escaping (Element) -> Void, singlePickerClosure: @escaping (SingleChoicePickerViewChoicable, Element) -> Void) {
+	init(elementInteractionClosure: @escaping (Element, String?) -> Void, singlePickerClosure: @escaping (SingleChoicePickerViewChoicable, Element) -> Void) {
         self.elementInteractionClosure = elementInteractionClosure
 		self.singlePickerClosure = singlePickerClosure
         super.init(frame: .zero)
         
         setupSubviews()
+		setupToastManager()
     }
 
     required init?(coder: NSCoder) {
@@ -105,13 +106,13 @@ final class UserProfileElementsView: UIView {
 			case .profileImage(let image): pictureButton.setContent(image)
 			case .displayName(let text): displayNameField.setContent(text)
 			case .realName(let text): realNameField.setContent(text)
-			case .location(let text): locationField.setContent(text)
-			case .bDay(let text): bDayButton.setContent(text)
-			case .gender(let text): genderButton.setContent(text)
-			case .ethnicity(let text): ethnicityButton.setContent(text)
-			case .religion(let text): religionButton.setContent(text)
-			case .figure(let text): figureButton.setContent(text)
-			case .maritalStatus(let text): maritalStatusButton.setContent(text)
+			case .location(let location): locationField.setContent(location)
+			case .bDay(let date): bDayButton.setContent(date)
+			case .gender(let attr): genderButton.setContent(attr)
+			case .ethnicity(let attr): ethnicityButton.setContent(attr)
+			case .religion(let attr): religionButton.setContent(attr)
+			case .figure(let attr): figureButton.setContent(attr)
+			case .maritalStatus(let attr): maritalStatusButton.setContent(attr)
 			case .height(let text, let isEnabled): heightField.setContent(text)
 			case .occupation(let text): occupationField.setContent(text)
 			case .aboutMe(let text): aboutMeField.setContent(text)
@@ -133,6 +134,15 @@ final class UserProfileElementsView: UIView {
 		singlePickerView.removeFromSuperview()
 		NSLayoutConstraint.deactivate(singlePickerViewConstraints)
 		singlePickerViewConstraints = []
+	}
+	
+	func showError(for element: Element, error: String) {
+		scrollView.contentOffset = .zero
+		
+		let relatedView = view(for: element)
+		let relatedPoint = CGPoint(x: relatedView.bounds.midX, y: relatedView.bounds.midY)
+		let point = relatedView.convert(relatedPoint, to: contentView)
+		contentView.makeToast(error, point: point, title: nil, image: nil, completion: nil)
 	}
 }
 
@@ -156,43 +166,77 @@ fileprivate extension UserProfileElementsView {
 		case .doneButton: return doneButton
 		}
 	}
+	
+	func element(for subview: UIView) -> Element? {
+		switch subview {
+		case pictureButton: return .profileImage(nil)
+		case displayNameField: return .displayName(nil)
+		case realNameField: return .realName(nil)
+		case locationField: return .location(nil)
+		case bDayButton: return .bDay(nil)
+		case genderButton: return .gender(nil)
+		case ethnicityButton: return .ethnicity(nil)
+		case religionButton: return .religion(nil)
+		case figureButton: return .figure(nil)
+		case maritalStatusButton: return .maritalStatus(nil)
+		case heightField: return .height(nil, isEnabled: heightField.isEnabled)
+		case occupationField: return .occupation(nil)
+		case aboutMeField: return .aboutMe(nil)
+		case doneButton: return .doneButton(nil)
+		default:
+			return nil
+		}
+	}
 }
 
-// MARK: - button actions
+extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
+	
+	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		let changedText = (textField.text as NSString?)?.replacingCharacters(in: range, with: string)
+		guard let element = element(for: textField) else {
+			assertionFailure("Could not find element for subview")
+			return true
+		}
+		elementInteractionClosure(element, changedText)
+		return true
+	}
+	
+	func textViewDidEndEditing(_ textView: UITextView) {
+		guard let element = element(for: textView) else {
+			assertionFailure("Could not find element for subview")
+			return
+		}
+		elementInteractionClosure(element, textView.text)
+	}
+	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+	
+	func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+		textView.resignFirstResponder()
+		return true
+	}
+	
+	@objc func buttonDidTap(_ sender: UIButton) {
+		guard let element = element(for: sender) else {
+			assertionFailure("Could not find element for subview")
+			return
+		}
+		elementInteractionClosure(element, nil)
+    }
+}
 
-fileprivate extension UserProfileElementsView {
+extension UserProfileElementsView: UIScrollViewDelegate {
 	
-	@objc func pictureButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.profileImage(sender.image(for: .normal)))
-    }
+	func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+		endEditing(true)
+	}
 	
-	@objc func bDayButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.bDay((text: sender.title(for: .normal), placeholder: nil)))
-    }
-	
-	@objc func genderButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.gender((text: sender.title(for: .normal), placeholder: nil)))
-    }
-	
-	@objc func maritalStatusButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.maritalStatus((text: sender.title(for: .normal), placeholder: nil)))
-    }
-	
-	@objc func ethnicityButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.ethnicity((text: sender.title(for: .normal), placeholder: nil)))
-    }
-	
-	@objc func religionButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.religion((text: sender.title(for: .normal), placeholder: nil)))
-    }
-	
-	@objc func figureButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.figure((text: sender.title(for: .normal), placeholder: nil)))
-    }
-	
-	@objc func doneButtonDidTap(_ sender: UserProfileButton) {
-		elementInteractionClosure(.doneButton((text: sender.title(for: .normal), placeholder: nil)))
-    }
+	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+		endEditing(true)
+	}
 }
 
 // MARK: - extension with layout only
@@ -306,5 +350,16 @@ fileprivate extension UserProfileElementsView {
 			singlePickerView.heightAnchor.constraint(equalToConstant: Constants.singleChoiceViewHeight)
 		]
 		NSLayoutConstraint.activate(singlePickerViewConstraints)
+	}
+	
+	private func setupToastManager() {
+		// No need to move it to any injection:
+		// 1. We use it only like local view
+		// 2. It is not a production design, so this dirty ui solition will be replaced
+		ToastManager.shared.position = .center
+		ToastManager.shared.isQueueEnabled = false
+		ToastManager.shared.style.verticalPadding = 0
+		ToastManager.shared.style.maxWidthPercentage = 0.4
+		ToastManager.shared.style.titleAlignment = .center
 	}
 }

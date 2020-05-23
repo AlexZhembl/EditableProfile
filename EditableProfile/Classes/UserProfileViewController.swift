@@ -13,14 +13,15 @@ protocol UserProfileView: class {
 	func updateElementsView(with elements: [Element])
 	func showSingleChoicePicker(for element: Element, with choices: [SingleChoicePickerViewChoicable])
 	func dismissSinglePicker()
+	func showError(for element: Element, error: String)
 }
 
 final class UserProfileViewController: UIViewController {
     
     private let viewModel: UserProfileViewModel
     private lazy var elementsView: UserProfileElementsView = {
-		let elementsView = UserProfileElementsView(elementInteractionClosure: { [weak self] element in
-				self?.viewModel.didInteractElement(element)
+		let elementsView = UserProfileElementsView(elementInteractionClosure: { [weak self] element, value in
+				self?.viewModel.didInteractElement(element, value: value)
 			},
 			singlePickerClosure: { [weak self] choice, element in
 				self?.viewModel.singleChoicePickerDidSelect(choice, for: element)
@@ -73,5 +74,9 @@ extension UserProfileViewController: UserProfileView {
 	
 	func dismissSinglePicker() {
 		elementsView.dismissSinglePicker()
+	}
+	
+	func showError(for element: Element, error: String) {
+		elementsView.showError(for: element, error: error)
 	}
 }

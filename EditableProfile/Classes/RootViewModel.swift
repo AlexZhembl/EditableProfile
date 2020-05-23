@@ -20,20 +20,21 @@ protocol RootViewModelSettings  {
 final class RootViewModelImpl: RootViewModel {
     
     weak var view: RootView?
-    private let settings: RootViewModelSettings
+    private let userModelProvider: UserModelProvider
     private let router: RootRouter
     
-    init(settings: RootViewModelSettings, router: RootRouter) {
-        self.settings = settings
+    init(userModelProvider: UserModelProvider, router: RootRouter) {
+        self.userModelProvider = userModelProvider
         self.router = router
     }
     
     func viewDidLoad() {
         view?.createButtons(register: RootButtonModel(title: "Register new user", isHidden: false),
-                            changeProfile: RootButtonModel(title: "Change existing profile", isHidden: settings.isUserRegistered))
+                            changeProfile: RootButtonModel(title: "Change existing profile", isHidden: !userModelProvider.isUserRegistered))
     }
     
     func registerDidTap() {
+		userModelProvider.syncUserModel(nil)
         router.presentUserProfileViewController()
     }
     

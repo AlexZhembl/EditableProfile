@@ -37,8 +37,8 @@
             filePath = "EditableProfile/Classes/UserProfileViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -53,9 +53,201 @@
             filePath = "EditableProfile/Classes/UserProfileViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "40104AC7-3A6E-470D-A4EB-1E7B7596F7E1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileElementsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "showError(for:error:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E5C266B-B2F5-4125-B739-61B472D30487"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileElementsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "201"
+            endingLineNumber = "201"
+            landmarkName = "textField(_:shouldChangeCharactersIn:replacementString:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C0C3E544-B7A1-4C9F-8EE6-981CD358D848"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "didInteractElement(_:value:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "053726F8-F766-42AF-98B3-56E9F9ECA7CE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileElementsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "updateView(with:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "053726F8-F766-42AF-98B3-56E9F9ECA7CE - e25cd5b36014cfc7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "EditableProfile.UserProfileElementsView.updateView(with: Swift.Array&lt;EditableProfile.UserProfileElementsView.Element&gt;) -&gt; ()"
+                  moduleName = "EditableProfile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aliaksei.zhemblouski/Spark/EditableProfile/EditableProfile/Classes/UserProfileElementsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "104"
+                  endingLineNumber = "104"
+                  offsetFromSymbolStart = "41">
+               </Location>
+               <Location
+                  uuid = "053726F8-F766-42AF-98B3-56E9F9ECA7CE - dfc20aacb2719861"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (EditableProfile.UserProfileElementsView.Element) -&gt; () in EditableProfile.UserProfileElementsView.updateView(with: Swift.Array&lt;EditableProfile.UserProfileElementsView.Element&gt;) -&gt; ()"
+                  moduleName = "EditableProfile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aliaksei.zhemblouski/Spark/EditableProfile/EditableProfile/Classes/UserProfileElementsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "105"
+                  endingLineNumber = "105"
+                  offsetFromSymbolStart = "408">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7E22369A-59C9-47EF-9545-9477A30AC813"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
+            landmarkName = "didInteractElement(_:value:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7E22369A-59C9-47EF-9545-9477A30AC813 - a479c1c0e4592c63"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "EditableProfile.UserProfileViewModelImpl.didInteractElement(_: EditableProfile.UserProfileElementsView.Element, value: Swift.Optional&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "EditableProfile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aliaksei.zhemblouski/Spark/EditableProfile/EditableProfile/Classes/UserProfileViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "113"
+                  endingLineNumber = "113"
+                  offsetFromSymbolStart = "8197">
+               </Location>
+               <Location
+                  uuid = "7E22369A-59C9-47EF-9545-9477A30AC813 - 3d2c534940bd8b08"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (EditableProfile.UserProfileElementsView.Element) -&gt; () in EditableProfile.UserProfileViewModelImpl.didInteractElement(_: EditableProfile.UserProfileElementsView.Element, value: Swift.Optional&lt;Swift.String&gt;) -&gt; ()"
+                  moduleName = "EditableProfile"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aliaksei.zhemblouski/Spark/EditableProfile/EditableProfile/Classes/UserProfileViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "114"
+                  endingLineNumber = "114"
+                  offsetFromSymbolStart = "90">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B28798B4-3F73-4978-911F-EE88176AB1CE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileElementsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "buttonDidTap(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ECFC9F49-57ED-49E9-A565-1638647AED14"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileElementsValidator.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "validate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F7CE3673-2956-4596-96A6-BE5AF29C638F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EditableProfile/Classes/UserProfileElementsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "textFieldShouldReturn(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

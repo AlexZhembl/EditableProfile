@@ -15,26 +15,25 @@ final class SettingsStorage {
         self.defaults = defaults
     }
     
-    private func set(value: Codable, for key: String) {
+    private func set(value: Codable?, for key: String) {
         defaults.setValue(value, forKey: key)
     }
     
-    private func getValue<T>(for key: String, defaultValue: T) -> T where T: Codable {
+	private func getValue<T: Codable>(for key: String) -> T? {
         guard let stored = defaults.value(forKey: key) else {
-            return defaultValue
+            return nil
         }
-        return (stored as? T) ?? defaultValue
+        return stored as? T
     }
 }
 
-extension SettingsStorage: RootViewModelSettings {
-    
-    var isUserRegistered: Bool {
-        get {
-            return getValue(for: "isUserRegistered", defaultValue: false)
-        }
-        set {
-            set(value: newValue, for: "isUserRegistered")
-        }
-    }
+extension SettingsStorage: UserModelProviderSettings {
+	var userData: Data? {
+		get {
+			return getValue(for: "userData")
+		}
+		set {
+			return set(value: newValue, for: "userData")
+		}
+	}
 }

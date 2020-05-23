@@ -8,21 +8,15 @@
 import Foundation
 
 struct UserProfileLocationsResponse: Decodable {
-    let cities: [CityInfo]
-    
-    struct CityInfo: Decodable {
-        let lat: String
-        let lon: String
-        let city: String
-    }
+    let cities: [UserLocation]
 }
 
 struct UserProfileAttributesResponse: Decodable {
-    let gender: [Attribute]
-    let ethnicity: [Attribute]
-    let religion: [Attribute]
-    let figure: [Attribute]
-    let maritalStatus: [Attribute]
+    let gender: [UserAttribute]
+    let ethnicity: [UserAttribute]
+    let religion: [UserAttribute]
+    let figure: [UserAttribute]
+    let maritalStatus: [UserAttribute]
     
     private enum CodingKeys: String, CodingKey {
         case gender
@@ -30,16 +24,5 @@ struct UserProfileAttributesResponse: Decodable {
         case religion
         case figure
         case maritalStatus = "marital_status"
-    }
-    
-    struct Attribute: Decodable {
-        let uid: String
-        let name: String
-        
-        private enum CodingKeys: String, CodingKey {
-            // let's never use id as propery for safety purp.
-            case uid = "id"
-            case name
-        }
     }
 }
