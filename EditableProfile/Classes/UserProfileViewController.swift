@@ -12,7 +12,8 @@ protocol UserProfileView: class {
 	
 	func updateElementsView(with elements: [Element])
 	func showSingleChoicePicker(for element: Element, with choices: [SingleChoicePickerViewChoicable])
-	func dismissSinglePicker()
+	func showDatePicker(for element: Element)
+	func dismissPicker()
 	func showError(for element: Element, error: String)
 }
 
@@ -23,8 +24,11 @@ final class UserProfileViewController: UIViewController {
 		let elementsView = UserProfileElementsView(elementInteractionClosure: { [weak self] element, value in
 				self?.viewModel.didInteractElement(element, value: value)
 			},
-			singlePickerClosure: { [weak self] choice, element in
+			singlePickerChoiceClosure: { [weak self] choice, element in
 				self?.viewModel.singleChoicePickerDidSelect(choice, for: element)
+			},
+			singlePickerDateClosure: { [weak self] date, element in
+				self?.viewModel.datePickerDidSelect(date: date, for: element)
 		})
         elementsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(elementsView)
@@ -72,7 +76,11 @@ extension UserProfileViewController: UserProfileView {
 		elementsView.setupSingleChoicePicker(for: element, with: choices)
 	}
 	
-	func dismissSinglePicker() {
+	func showDatePicker(for element: Element) {
+		elementsView.setupDateChoicePicker(for: element)
+	}
+	
+	func dismissPicker() {
 		elementsView.dismissSinglePicker()
 	}
 	

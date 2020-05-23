@@ -81,11 +81,15 @@ final class UserProfileElementsView: UIView {
 	private var singlePickerViewConstraints: [NSLayoutConstraint] = []
     
     private let elementInteractionClosure: (Element, String?) -> Void
-    private let singlePickerClosure: (SingleChoicePickerViewChoicable, Element) -> Void
+    private let singlePickerChoiceClosure: (SingleChoicePickerViewChoicable, Element) -> Void
+	private let singlePickerDateClosure: (Date, Element) -> Void
 	
-	init(elementInteractionClosure: @escaping (Element, String?) -> Void, singlePickerClosure: @escaping (SingleChoicePickerViewChoicable, Element) -> Void) {
+	init(elementInteractionClosure: @escaping (Element, String?) -> Void,
+		 singlePickerChoiceClosure: @escaping (SingleChoicePickerViewChoicable, Element) -> Void,
+		 singlePickerDateClosure: @escaping (Date, Element) -> Void) {
         self.elementInteractionClosure = elementInteractionClosure
-		self.singlePickerClosure = singlePickerClosure
+		self.singlePickerChoiceClosure = singlePickerChoiceClosure
+		self.singlePickerDateClosure = singlePickerDateClosure
         super.init(frame: .zero)
         
         setupSubviews()
@@ -126,7 +130,16 @@ final class UserProfileElementsView: UIView {
 
 		setupSinglePickerLayout(with: relatedView)
 		singlePickerView.setup(with: choices) { [weak self] choice in
-			self?.singlePickerClosure(choice, element)
+			self?.singlePickerChoiceClosure(choice, element)
+		}
+	}
+	
+	func setupDateChoicePicker(for element: UserProfileElementsView.Element) {
+		let relatedView = view(for: element)
+
+		setupSinglePickerLayout(with: relatedView)
+		singlePickerView.setupForDate { [weak self] date in
+			self?.singlePickerDateClosure(date, element)
 		}
 	}
 	
@@ -201,17 +214,26 @@ extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
 		return true
 	}
 	
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+		return true
+	}
+	
+	func textFieldDidEndEditing(_ textField: UITextField) {
+		textField.resignFirstResponder()
+		guard let element = element(for: textField) else {
+			assertionFailure("Could not find element for subview")
+			return
+		}
+		elementInteractionClosure(element, textField.text)
+	}
+	
 	func textViewDidEndEditing(_ textView: UITextView) {
 		guard let element = element(for: textView) else {
 			assertionFailure("Could not find element for subview")
 			return
 		}
 		elementInteractionClosure(element, textView.text)
-	}
-	
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
 	}
 	
 	func textViewShouldEndEditing(_ textView: UITextView) -> Bool {

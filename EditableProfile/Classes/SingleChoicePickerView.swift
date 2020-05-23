@@ -21,16 +21,32 @@ class SingleChoicePickerView: UIView {
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: String(describing: UITableViewCell.self))
-		tableView.backgroundColor = UIColor(red: 0.85, green: 0.9, blue: 1.0, alpha: 1.0)
 		tableView.layer.borderWidth = 1.0
+		tableView.backgroundColor = backgroundColor
         return tableView
     }()
+	private lazy var datePicker: UIDatePicker = {
+		let datePicker = UIDatePicker()
+		datePicker.translatesAutoresizingMaskIntoConstraints = false
+		datePicker.datePickerMode = .date
+		return datePicker
+	}()
+	private lazy var datePickerDoneButton: UIButton = {
+		let button = UIButton(type: .custom)
+		button.setTitle("Choose date", for: .normal)
+		button.layer.borderWidth = 0.5
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.addTarget(self, action: #selector(datePickerDoneDidTap), for: .touchUpInside)
+		return button
+	}()
 	private var choices: [SingleChoicePickerViewChoicable] = []
     private var choiceClosure: ((SingleChoicePickerViewChoicable) -> Void)?
+	private var dateClosure: ((Date) -> Void)?
     
 	override init(frame: CGRect) {
         super.init(frame: frame)
         
+		backgroundColor = UIColor(red: 0.85, green: 0.9, blue: 1.0, alpha: 1.0)
         setupLayout()
     }
 
@@ -41,8 +57,19 @@ class SingleChoicePickerView: UIView {
 	func setup(with choices: [SingleChoicePickerViewChoicable], choiceClosure: @escaping (SingleChoicePickerViewChoicable) -> Void) {
 		self.choiceClosure = choiceClosure
 		self.choices = choices
+		tableView.isHidden = false
+		datePicker.isHidden = true
+		datePickerDoneButton.isHidden = true
 		tableView.contentOffset = .zero
 		tableView.reloadData()
+	}
+	
+	func setupForDate(dateClosure: @escaping (Date) -> Void) {
+		self.dateClosure = dateClosure
+		tableView.isHidden = true
+		datePicker.isHidden = false
+		datePickerDoneButton.isHidden = false
+		datePicker.setDate(Date(), animated: false)
 	}
     
     private func setupLayout() {
@@ -54,7 +81,24 @@ class SingleChoicePickerView: UIView {
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
+		
+		addSubview(datePickerDoneButton)
+		addSubview(datePicker)
+		NSLayoutConstraint.activate([
+			datePickerDoneButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+			datePickerDoneButton.topAnchor.constraint(equalTo: topAnchor),
+			datePickerDoneButton.heightAnchor.constraint(equalToConstant: 44),
+			
+			datePicker.topAnchor.constraint(equalTo: datePickerDoneButton.bottomAnchor),
+			datePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+			datePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+			datePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+		])
     }
+	
+	@objc func datePickerDoneDidTap() {
+		dateClosure?(datePicker.date)
+	}
 }
 
 extension SingleChoicePickerView: UITableViewDataSource {
@@ -69,8 +113,8 @@ extension SingleChoicePickerView: UITableViewDataSource {
 			return cell
 		}
 
-		cell.textLabel?.text = choice.title
 		cell.backgroundColor = tableView.backgroundColor
+		cell.textLabel?.text = choice.title
 		return cell
 	}
 }

@@ -11,6 +11,7 @@ protocol UserProfileViewModel {
     func viewDidLoad()
 	func didInteractElement(_ element: UserProfileElementsView.Element, value: String?)
 	func singleChoicePickerDidSelect(_ choice: SingleChoicePickerViewChoicable, for element: UserProfileElementsView.Element)
+	func datePickerDidSelect(date: Date, for element: UserProfileElementsView.Element)
 }
 
 final class UserProfileViewModelImpl: UserProfileViewModel {
@@ -94,10 +95,14 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 			let filtered = realQuey.count == 0 ?
 				locations?.cities : locations?.cities.filter { $0.city.starts(with: query) }
 			viewElements.update(with: element)
-			view?.showSingleChoicePicker(for: element, with: filtered ?? [])
+			if let cities = filtered, cities.count > 0 {
+				view?.showSingleChoicePicker(for: element, with: cities)
+			}
+			else {
+				view?.dismissPicker()
+			}
 		case .bDay:
-				// show single picker for date ?
-				break
+			view?.showDatePicker(for: element)
 		case .gender:
 			view?.showSingleChoicePicker(for: element, with: attributes?.gender ?? [])
 		case .ethnicity:
@@ -128,7 +133,7 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 	}
 	
 	func singleChoicePickerDidSelect(_ choice: SingleChoicePickerViewChoicable, for element: Element) {
-		view?.dismissSinglePicker()
+		view?.dismissPicker()
 		
 		let updatedElement: Element
 		switch element {
@@ -157,6 +162,20 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 		
 		viewElements.update(with: updatedElement)
 		view?.updateElementsView(with: [updatedElement])
+	}
+	
+	func datePickerDidSelect(date: Date, for element: UserProfileElementsView.Element) {
+		view?.dismissPicker()
+		
+		switch element {
+		case .bDay:
+			let newElement = Element.bDay((date: date, placeholder: nil))
+			viewElements.update(with: newElement)
+			view?.updateElementsView(with: [newElement])
+		default:
+			assertionFailure("Could not find element for date")
+			return
+		}
 	}
 }
 

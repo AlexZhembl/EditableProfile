@@ -121,6 +121,7 @@ final class UserProfileDateButton: UIButton, UserProfileSubview {
 		let title: String?
 		if let date = content?.date {
 			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "yyyy-MM-dd"
 			title = dateFormatter.string(from: date)
 		}
 		else {

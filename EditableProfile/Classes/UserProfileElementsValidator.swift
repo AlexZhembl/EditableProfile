@@ -29,6 +29,8 @@ fileprivate extension UserProfileElementsView.Element {
 		static let freeTextMaxLenght = 256
 		static let aboutMeTextMaxLenght = 5000
 		static let heightRange = Range<Int>(uncheckedBounds: (lower: 50, upper: 250))
+		static let bDayRange = Range<Date>(uncheckedBounds: (lower: Date(timeIntervalSince1970: 0),
+															 upper: Date()))
 	}
 	
 	var isMandatory: Bool {
@@ -54,7 +56,10 @@ fileprivate extension UserProfileElementsView.Element {
 			return text.count <= Constants.freeTextMaxLenght
 		
 		case .bDay(let content):
-			return true
+			guard let date = content?.date else {
+				return !isMandatory
+			}
+			return Constants.bDayRange.contains(date)
 		
 		case .location(let content):
 			return content?.loc != nil || !isMandatory
@@ -96,7 +101,7 @@ fileprivate extension UserProfileElementsView.Element {
 			return "Text should be in range 1...256"
 		
 		case .bDay:
-			return "Please selecte bDay"
+			return "bDay should be between 1970 and nowday"
 			
 		case .location:
 			return "You should choos form list"
