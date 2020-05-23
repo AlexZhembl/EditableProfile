@@ -168,8 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				AC371BDC247420CF00B35BB1 /* RootTests.swift */,
-				ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */,
 				ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */,
+				ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */,
 				AC371BDE247420CF00B35BB1 /* Info.plist */,
 			);
 			path = EditableProfileTests;
