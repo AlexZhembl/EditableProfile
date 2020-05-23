@@ -9,10 +9,10 @@ import Foundation
 
 protocol UserProfileViewModel {
     func viewDidLoad()
+	func dismissButtonDidTap()
 	func didInteractElement(_ element: UserProfileElementsView.Element, value: String?)
 	func singleChoicePickerDidSelect(_ choice: SingleChoicePickerViewChoicable, for element: UserProfileElementsView.Element)
 	func datePickerDidSelect(date: Date, for element: UserProfileElementsView.Element)
-	
 }
 
 final class UserProfileViewModelImpl: UserProfileViewModel {
@@ -179,6 +179,10 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 			assertionFailure("Could not find element for date")
 			return
 		}
+	}
+	
+	func dismissButtonDidTap() {
+		router.dismissViewController()
 	}
 }
 

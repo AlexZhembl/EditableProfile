@@ -21,6 +21,7 @@ final class RootRouterImpl: RootRouter {
     
     func presentUserProfileViewController() {
         let editProfileVC = DependencyProvider.shared.assembler.resolver.resolve(UserProfileViewController.self)!
-        presentingController()?.present(editProfileVC, animated: true, completion: nil)
+		editProfileVC.modalPresentationStyle = .fullScreen
+		presentingController()?.present(editProfileVC, animated: true, completion: nil)
     }
 }

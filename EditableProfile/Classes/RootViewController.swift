@@ -13,12 +13,32 @@ struct RootButtonModel {
 }
 
 protocol RootView: class {
-    func createButtons(register: RootButtonModel, changeProfile: RootButtonModel)
+    func setupButtons(register: RootButtonModel, changeProfile: RootButtonModel)
 }
 
 final class RootViewController: UIViewController {
     
     private let viewModel: RootViewModel
+	private lazy var registerButton: UIButton = {
+		let button = UIButton(type: .custom)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.titleLabel?.numberOfLines = 0
+		button.titleLabel?.textAlignment = .center
+		button.addTarget(self, action: #selector(registerButtonDidTap), for: .touchUpInside)
+		button.backgroundColor = UIColor.random
+		button.accessibilityIdentifier = "registerButton"
+		return button
+	}()
+	private lazy var changeProfileButton: UIButton = {
+		let button = UIButton(type: .custom)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.titleLabel?.numberOfLines = 0
+		button.titleLabel?.textAlignment = .center
+		button.addTarget(self, action: #selector(changeProfileButtonDidTap), for: .touchUpInside)
+		button.backgroundColor = UIColor.random
+		button.accessibilityIdentifier = "changeProfileButton"
+		return button
+	}()
 
     init(viewModel: RootViewModel) {
         self.viewModel = viewModel
@@ -36,13 +56,13 @@ final class RootViewController: UIViewController {
         super.loadView()
         
         view.backgroundColor = .white
+		layoutButtons()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        // Could be in loadView() but does not matter
-        viewModel.viewDidLoad()
+        viewModel.viewWillAppear()
     }
     
     @objc func registerButtonDidTap() {
@@ -52,27 +72,9 @@ final class RootViewController: UIViewController {
     @objc func changeProfileButtonDidTap() {
         viewModel.editProfileDidTap()
     }
-}
-
-extension RootViewController: RootView {
-    
-	func createButtons(register: RootButtonModel, changeProfile: RootButtonModel) {
-        func button(model: RootButtonModel, action: Selector, ai: String) -> UIView {
-            let button = UIButton(type: .custom)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.setTitle(model.title, for: .normal)
-            button.titleLabel?.numberOfLines = 0
-            button.titleLabel?.textAlignment = .center
-            button.addTarget(self, action: action, for: .touchUpInside)
-            button.backgroundColor = UIColor.random
-            button.isHidden = model.isHidden
-			button.accessibilityIdentifier = ai
-            return button
-        }
-
-		let buttons = [button(model: register, action: #selector(registerButtonDidTap), ai: "registerButton"),
-					   button(model: changeProfile, action: #selector(changeProfileButtonDidTap), ai: "changeProfileButton")]
-		let contentView = UIStackView(arrangedSubviews: buttons)
+	
+	private func layoutButtons() {
+		let contentView = UIStackView(arrangedSubviews: [registerButton, changeProfileButton])
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.distribution = .fillEqually
         contentView.axis = .horizontal
@@ -86,6 +88,17 @@ extension RootViewController: RootView {
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         ])
+	}
+}
+
+extension RootViewController: RootView {
+    
+	func setupButtons(register: RootButtonModel, changeProfile: RootButtonModel) {
+		registerButton.setTitle(register.title, for: .normal)
+		changeProfileButton.setTitle(changeProfile.title, for: .normal)
+		
+		registerButton.isHidden = register.isHidden
+		changeProfileButton.isHidden = changeProfile.isHidden
     }
 }
 

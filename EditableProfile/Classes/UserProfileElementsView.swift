@@ -153,7 +153,7 @@ final class UserProfileElementsView: UIView {
 	}
 	
 	func showError(for element: Element, error: String) {
-		scrollView.contentOffset = .zero
+		scrollView.setContentOffset(.zero, animated: true)
 		
 		let relatedView = view(for: element)
 		let relatedPoint = CGPoint(x: relatedView.bounds.midX, y: relatedView.bounds.midY)

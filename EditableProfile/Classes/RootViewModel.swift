@@ -8,7 +8,7 @@
 import Foundation
 
 protocol RootViewModel {
-    func viewDidLoad()
+    func viewWillAppear()
     func registerDidTap()
     func editProfileDidTap()
 }
@@ -24,9 +24,9 @@ final class RootViewModelImpl: RootViewModel {
         self.router = router
     }
     
-    func viewDidLoad() {
-        view?.createButtons(register: RootButtonModel(title: "Register new user", isHidden: false),
-                            changeProfile: RootButtonModel(title: "Change existing profile", isHidden: !userModelProvider.isUserRegistered))
+    func viewWillAppear() {
+        view?.setupButtons(register: RootButtonModel(title: "Register new user", isHidden: false),
+						   changeProfile: RootButtonModel(title: "Change existing profile", isHidden: !userModelProvider.isUserRegistered))
     }
     
     func registerDidTap() {

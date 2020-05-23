@@ -18,6 +18,10 @@ protocol UserProfileView: class {
 }
 
 final class UserProfileViewController: UIViewController {
+	
+	private enum Constants {
+		static let closeButtonInsets = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 30)
+	}
     
     private let viewModel: UserProfileViewModel
     private lazy var elementsView: UserProfileElementsView = {
@@ -42,8 +46,8 @@ final class UserProfileViewController: UIViewController {
     }()
 
     init(viewModel: UserProfileViewModel) {
-       self.viewModel = viewModel
-       super.init(nibName: nil, bundle: nil)
+		self.viewModel = viewModel
+		super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -64,7 +68,24 @@ final class UserProfileViewController: UIViewController {
         
         // Could be in loadView() but does not matter
         viewModel.viewDidLoad()
+		// This is because I don't want use any navigation controllers
+		setupDismissButton()
     }
+	
+	func setupDismissButton() {
+		let button = UIButton(type: .close)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
+		view.addSubview(button)
+		NSLayoutConstraint.activate([
+			button.topAnchor.constraint(equalTo: view.topAnchor, constant: Constants.closeButtonInsets.top),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.closeButtonInsets.right),
+        ])
+	}
+	
+	@objc func dismissTapped() {
+		viewModel.dismissButtonDidTap()
+	}
 }
 
 extension UserProfileViewController: UserProfileView {
