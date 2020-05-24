@@ -107,6 +107,7 @@ final class UserProfileElementsView: UIView {
     }
 	
 	func updateView(with elements: [Element]) {
+		// MARK: - Point where we initiating elements with date from model
 		elements.forEach { element in
 			switch element {
 			case .profileImage(let image): 		 pictureButton.setContent(image)
@@ -139,6 +140,7 @@ final class UserProfileElementsView: UIView {
 		}
 	}
 	
+	// MARK: - In normal app this method should be part of method above but i have no time
 	func setupDateChoicePicker(for element: UserProfileElementsView.Element) {
 		let relatedView = view(for: element)
 
@@ -163,6 +165,8 @@ final class UserProfileElementsView: UIView {
 		contentView.makeToast(error, point: point, title: nil, image: nil, completion: nil)
 	}
 }
+
+// MARK: - Support methods to easy map view->element, element->view
 
 fileprivate extension UserProfileElementsView {
 	
@@ -227,6 +231,8 @@ fileprivate extension UserProfileElementsView {
 	}
 }
 
+// MARK: - TextView's and TextFeild's deleagtes to tell our model what's happening
+
 extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
 	
 	func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -265,6 +271,8 @@ extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
 		elementInteractionClosure(element, textView.text)
 	}
 }
+
+// MARK: - Just some UX
 
 extension UserProfileElementsView: UIScrollViewDelegate {
 	
