@@ -38,8 +38,11 @@ final class ImagePickerImpl: NSObject, ImagePicker, UIImagePickerControllerDeleg
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             alertController.popoverPresentationController?.sourceView = viewController.view
-            alertController.popoverPresentationController?.sourceRect = viewController.view.bounds
-            alertController.popoverPresentationController?.permittedArrowDirections = [.down, .up]
+			alertController.popoverPresentationController?.sourceRect = CGRect(x: viewController.view.bounds.midX,
+																			   y: viewController.view.bounds.minY,
+																			   width: 0,
+																			   height: 100)
+			alertController.popoverPresentationController?.permittedArrowDirections = [.up]
         }
         viewController.present(alertController, animated: true)
     }
