@@ -56,6 +56,10 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 				return
 			}
 			
+			// MARK: - Main point to init elements.
+			// when i chose between plain struct and nested enum, I chose enums
+			// just because to update view we can use single element and not reconfigure whole model
+			// But for now I see another ways, maybe more beautiful
 			let model = self.userModelProvider.fetchUserModel()
 			self.viewElements = [.profileImage(model?.picture),
 								 .displayName((text: model?.displayName, placeholder: "Display name")),
@@ -75,6 +79,10 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 		}
     }
 	
+	// MARK: - Here we process user interaction with our elements
+	// Some of them we just store
+	// others show a picker
+	// Done button ask to validate and save model
 	func didInteractElement(_ element: Element, value: String?) {
 		var updElement: Element?
 		switch element {
@@ -97,9 +105,10 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 			guard let query = value else {
 				return
 			}
-			let realQuey = query.trimmingCharacters(in: .whitespacesAndNewlines)
+			// MARK: - Locations: modify query and show results in picker
+			let realQuey = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
 			let filtered = realQuey.count == 0 ?
-				locations?.cities : locations?.cities.filter { $0.city.starts(with: query) }
+				locations?.cities : locations?.cities.filter { $0.city.lowercased().starts(with: realQuey) }
 			if let cities = filtered, cities.count > 0 {
 				view?.showSingleChoicePicker(for: element, with: cities)
 			}
@@ -126,6 +135,7 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 		case .aboutMe:
 			updElement = .aboutMe((value, nil))
 		case .doneButton:
+			// MARK: - doneButton: Validating each element and trying to create and save model
 			let problemElements = viewElements.filter { !modelFabric.isElementValid($0) }
 			problemElements.forEach { view?.showError(for: $0, error: modelFabric.error(for: $0)) }
 			if problemElements.count == 0,
@@ -172,6 +182,7 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 		view?.updateElementsView(with: [updatedElement])
 	}
 	
+	// MARK: - added this in last days. In normal app this case should be contained in method above
 	func datePickerDidSelect(date: Date, for element: UserProfileElementsView.Element) {
 		view?.dismissPicker()
 		

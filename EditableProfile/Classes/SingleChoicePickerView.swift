@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - UIView used for presenting single choice values like gender, date, ...
+
 protocol SingleChoicePickerViewChoicable {
 	var title: String { get }
 	var uid: String { get }
@@ -37,6 +39,7 @@ class SingleChoicePickerView: UIView {
 		button.layer.borderWidth = 0.5
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.addTarget(self, action: #selector(datePickerDoneDidTap), for: .touchUpInside)
+		button.accessibilityIdentifier = "datePickerDoneButton"
 		return button
 	}()
 	private var choices: [SingleChoicePickerViewChoicable] = []
@@ -115,6 +118,7 @@ extension SingleChoicePickerView: UITableViewDataSource {
 
 		cell.backgroundColor = tableView.backgroundColor
 		cell.textLabel?.text = choice.title
+		cell.accessibilityIdentifier = "SingleChoicePickerViewCell"
 		return cell
 	}
 }

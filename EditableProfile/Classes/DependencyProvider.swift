@@ -8,6 +8,8 @@
 import Foundation
 import Swinject
 
+// MARK : - So here we use Swinject without autoregister -> let's be patient with force unwrapping
+//
 class DependencyProvider {
     
     static var shared = DependencyProvider()

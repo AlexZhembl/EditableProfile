@@ -61,6 +61,8 @@ fileprivate extension UserModel {
 	}
 }
 
+// MARK: - Main point for fiels limitations and validating
+
 fileprivate extension UserProfileElementsView.Element {
 	
 	private enum Constants {

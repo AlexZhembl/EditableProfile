@@ -7,6 +7,9 @@
 
 import UIKit
 
+// MARK: - Our elements used as inputs for user data
+// Usefull is only UserProfileSubview protocol conformance, other is ui settings
+
 protocol UserProfileSubview {
 	associatedtype Content
 	
@@ -18,7 +21,7 @@ protocol UserProfileSubview {
 final class UserProfileAttributesButton: UIButton, UserProfileSubview {
 	typealias Content = UserProfileElementsView.Element.AttributesContent
 
-	init(target: Any?, action: Selector) {
+	init(target: Any?, action: Selector, ai: String) {
 		super.init(frame: .zero)
 		
 		translatesAutoresizingMaskIntoConstraints = false
@@ -35,6 +38,7 @@ final class UserProfileAttributesButton: UIButton, UserProfileSubview {
         imageView?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
 		addTarget(target, action: action, for: .touchUpInside)
+		accessibilityIdentifier = ai
 	}
 	
 	required init?(coder: NSCoder) {
@@ -50,13 +54,14 @@ final class UserProfileAttributesButton: UIButton, UserProfileSubview {
 final class UserProfileTextButton: UIButton, UserProfileSubview {
 	typealias Content = UserProfileElementsView.Element.TextContent
 
-	init(target: Any?, action: Selector) {
+	init(target: Any?, action: Selector, ai: String) {
 		super.init(frame: .zero)
 		
 		translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 8.0
 		backgroundColor = UIColor.blue.withAlphaComponent(0.4)
 		addTarget(target, action: action, for: .touchUpInside)
+		accessibilityIdentifier = ai
 	}
 	
 	required init?(coder: NSCoder) {
@@ -72,13 +77,14 @@ final class UserProfileTextButton: UIButton, UserProfileSubview {
 final class UserProfilePictureButton: UIButton, UserProfileSubview {
 	typealias Content = UIImage?
 	
-	init(target: Any?, action: Selector) {
+	init(target: Any?, action: Selector, ai: String) {
 		super.init(frame: .zero)
 		
 		translatesAutoresizingMaskIntoConstraints = false
 		addTarget(target, action: action, for: .touchUpInside)
 		clipsToBounds = true
         layer.borderWidth = 0.5
+		accessibilityIdentifier = ai
 	}
 	
 	required init?(coder: NSCoder) {
@@ -94,7 +100,7 @@ final class UserProfilePictureButton: UIButton, UserProfileSubview {
 final class UserProfileDateButton: UIButton, UserProfileSubview {
 	typealias Content = UserProfileElementsView.Element.DateContent
 	
-	init(target: Any?, action: Selector) {
+	init(target: Any?, action: Selector, ai: String) {
 		super.init(frame: .zero)
 		
 		translatesAutoresizingMaskIntoConstraints = false
@@ -111,6 +117,7 @@ final class UserProfileDateButton: UIButton, UserProfileSubview {
         imageView?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         imageEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
 		addTarget(target, action: action, for: .touchUpInside)
+		accessibilityIdentifier = ai
 	}
 	
 	required init?(coder: NSCoder) {
@@ -136,7 +143,7 @@ final class UserProfileDateButton: UIButton, UserProfileSubview {
 final class UserProfileTextField: UITextField, UserProfileSubview {
 	typealias Content = UserProfileElementsView.Element.TextContent
     
-	init(delegate: UITextFieldDelegate) {
+	init(delegate: UITextFieldDelegate, ai: String) {
 		super.init(frame: .zero)
         
 		translatesAutoresizingMaskIntoConstraints = false
@@ -149,6 +156,7 @@ final class UserProfileTextField: UITextField, UserProfileSubview {
         layer.shadowOpacity = 1
 		returnKeyType = .done
 		self.delegate = delegate
+		accessibilityIdentifier = ai
     }
 	
 	required init?(coder: NSCoder) {
@@ -164,7 +172,7 @@ final class UserProfileTextField: UITextField, UserProfileSubview {
 final class UserProfileLocationField: UITextField, UserProfileSubview {
 	typealias Content = UserProfileElementsView.Element.LocationContent
     
-	init(delegate: UITextFieldDelegate) {
+	init(delegate: UITextFieldDelegate, ai: String) {
 		super.init(frame: .zero)
         
 		translatesAutoresizingMaskIntoConstraints = false
@@ -177,6 +185,7 @@ final class UserProfileLocationField: UITextField, UserProfileSubview {
         layer.shadowOpacity = 1
 		returnKeyType = .done
 		self.delegate = delegate
+		accessibilityIdentifier = ai
     }
 	
 	required init?(coder: NSCoder) {
@@ -192,7 +201,7 @@ final class UserProfileLocationField: UITextField, UserProfileSubview {
 final class UserProfileTextView: UITextView, UserProfileSubview {
 	typealias Content = UserProfileElementsView.Element.TextContent
     
-	init(delegate: UITextViewDelegate) {
+	init(delegate: UITextViewDelegate, ai: String) {
 		super.init(frame: .zero, textContainer: nil)
 		
 		translatesAutoresizingMaskIntoConstraints = false
@@ -204,6 +213,7 @@ final class UserProfileTextView: UITextView, UserProfileSubview {
 		layer.shadowOpacity = 1
 		clipsToBounds = false
 		self.delegate = delegate
+		accessibilityIdentifier = ai
 	}
 	
 	required init?(coder: NSCoder) {

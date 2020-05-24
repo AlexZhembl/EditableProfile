@@ -24,6 +24,7 @@ final class RootViewModelImpl: RootViewModel {
         self.router = router
     }
     
+	// MARK: - Show changeProfile button only if user exists
     func viewWillAppear() {
         view?.setupButtons(register: RootButtonModel(title: "Register new user", isHidden: false),
 						   changeProfile: RootButtonModel(title: "Change existing profile", isHidden: !userModelProvider.isUserRegistered))

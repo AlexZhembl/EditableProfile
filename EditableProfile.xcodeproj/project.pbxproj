@@ -32,8 +32,6 @@
 		AC6B621D247717F000971D2F /* UserProfileElementsViewSubviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */; };
 		AC6B621F2477C61F00971D2F /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B621E2477C61F00971D2F /* UserModel.swift */; };
 		AC6B62222477D50600971D2F /* UserModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC6B62212477D50600971D2F /* UserModelProvider.swift */; };
-		ACA542BF247978E000A57CB1 /* UserProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542BE247978E000A57CB1 /* UserProfileUITests.swift */; };
-		ACA542C124797E8D00A57CB1 /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */; };
 		ACA542C3247983B500A57CB1 /* UserModelProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */; };
 		ACA542C52479A00600A57CB1 /* UserProfileModelFrabric.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */; };
 		ACA542C7247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C6247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift */; };
@@ -97,8 +95,6 @@
 		AC6B621C247717F000971D2F /* UserProfileElementsViewSubviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileElementsViewSubviews.swift; sourceTree = "<group>"; };
 		AC6B621E2477C61F00971D2F /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		AC6B62212477D50600971D2F /* UserModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelProvider.swift; sourceTree = "<group>"; };
-		ACA542BE247978E000A57CB1 /* UserProfileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileUITests.swift; sourceTree = "<group>"; };
-		ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelProviderTests.swift; sourceTree = "<group>"; };
 		ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModelFrabric.swift; sourceTree = "<group>"; };
 		ACA542C6247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileAttributesAndLocationsFetcherTests.swift; sourceTree = "<group>"; };
@@ -175,7 +171,6 @@
 				ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */,
 				ACA542C6247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift */,
 				ACA542C8247ABCD600A57CB1 /* UserProfileModelFabricTests.swift */,
-				ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */,
 				AC371BDE247420CF00B35BB1 /* Info.plist */,
 			);
 			path = EditableProfileTests;
@@ -185,7 +180,6 @@
 			isa = PBXGroup;
 			children = (
 				AC371BE7247420CF00B35BB1 /* RootUITests.swift */,
-				ACA542BE247978E000A57CB1 /* UserProfileUITests.swift */,
 				AC371BE9247420CF00B35BB1 /* Info.plist */,
 			);
 			path = EditableProfileUITests;
@@ -566,7 +560,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACA542C7247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift in Sources */,
-				ACA542C124797E8D00A57CB1 /* UserProfileTests.swift in Sources */,
 				AC371BDD247420CF00B35BB1 /* RootTests.swift in Sources */,
 				ACA542C9247ABCD600A57CB1 /* UserProfileModelFabricTests.swift in Sources */,
 				ACA542C3247983B500A57CB1 /* UserModelProviderTests.swift in Sources */,
@@ -577,7 +570,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACA542BF247978E000A57CB1 /* UserProfileUITests.swift in Sources */,
 				AC371BE8247420CF00B35BB1 /* RootUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

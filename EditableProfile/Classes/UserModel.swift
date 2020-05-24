@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - Model stored encodable in UserDefaults between launches
+
 final class UserModel: Codable {
 	var picture: UIImage?
 	var displayName: String?

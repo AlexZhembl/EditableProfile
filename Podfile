@@ -16,9 +16,6 @@ target 'EditableProfile' do
   end
 
   target 'EditableProfileUITests' do
-    pod 'Swinject'
-    pod 'Quick'
-    pod 'Nimble'
   end
 
 end

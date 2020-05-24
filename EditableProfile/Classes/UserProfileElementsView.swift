@@ -8,6 +8,8 @@
 import UIKit
 import Toast_Swift
 
+// MARK: - Main class which contains input views
+
 final class UserProfileElementsView: UIView {
 	
 	enum Element {
@@ -59,24 +61,24 @@ final class UserProfileElementsView: UIView {
         return view
     }()
     private let pictureButton: UserProfilePictureButton = {
-		let button = UserProfilePictureButton(target: self, action: #selector(buttonDidTap))
+		let button = UserProfilePictureButton(target: self, action: #selector(buttonDidTap), ai: "pictureButton")
         button.layer.cornerRadius = Constants.pictureButtonSize.width * 0.5
         
         return button
     }()
-    private lazy var displayNameField = UserProfileTextField(delegate: self)
-    private lazy var realNameField = UserProfileTextField(delegate: self)
-    private lazy var locationField = UserProfileLocationField(delegate: self)
-    private lazy var bDayButton = UserProfileDateButton(target: self, action: #selector(buttonDidTap))
-    private lazy var genderButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
-    private lazy var maritalStatusButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
-    private lazy var ethnicityButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
-    private lazy var religionButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
-    private lazy var figureButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap))
-    private lazy var heightField = UserProfileTextField(delegate: self)
-    private lazy var occupationField = UserProfileTextField(delegate: self)
-	private lazy var aboutMeField = UserProfileTextView(delegate: self)
-    private lazy var doneButton = UserProfileTextButton(target: self, action: #selector(buttonDidTap))
+	private lazy var displayNameField = UserProfileTextField(delegate: self, ai: "displayNameField")
+    private lazy var realNameField = UserProfileTextField(delegate: self, ai: "realNameField")
+    private lazy var locationField = UserProfileLocationField(delegate: self, ai: "locationField")
+    private lazy var bDayButton = UserProfileDateButton(target: self, action: #selector(buttonDidTap), ai: "bDayButton")
+	private lazy var genderButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "genderButton")
+    private lazy var maritalStatusButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "maritalStatusButton")
+    private lazy var ethnicityButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "ethnicityButton")
+    private lazy var religionButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "religionButton")
+    private lazy var figureButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "figureButton")
+    private lazy var heightField = UserProfileTextField(delegate: self, ai: "heightField")
+    private lazy var occupationField = UserProfileTextField(delegate: self, ai: "occupationField")
+	private lazy var aboutMeField = UserProfileTextView(delegate: self, ai: "aboutMeField")
+    private lazy var doneButton = UserProfileTextButton(target: self, action: #selector(buttonDidTap), ai: "doneButton")
 	private lazy var singlePickerView = SingleChoicePickerView()
 	private var singlePickerViewConstraints: [NSLayoutConstraint] = []
     
@@ -123,7 +125,7 @@ final class UserProfileElementsView: UIView {
 			case .height(let text, let isEnabled):
 				heightField.setContent(text)
 				heightField.keyboardType = .numberPad
-				heightField.isUserInteractionEnabled = isEnabled
+				heightField.isEnabled = isEnabled
 			}
 		}
 	}
@@ -245,15 +247,6 @@ extension UserProfileElementsView: UITextFieldDelegate, UITextViewDelegate {
 		textField.resignFirstResponder()
 		return true
 	}
-	
-//	func textFieldDidEndEditing(_ textField: UITextField) {
-//		textField.resignFirstResponder()
-//		guard let element = element(for: textField) else {
-//			assertionFailure("Could not find element for subview")
-//			return
-//		}
-//		elementInteractionClosure(element, textField.text)
-//	}
 	
 	func textViewDidBeginEditing(_ textView: UITextView) {
 		scrollViewToTop(textView)
