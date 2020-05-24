@@ -28,6 +28,9 @@ final class UserProfileModelFrabricImpl: UserProfileModelFrabric {
 		guard mandatory.isSubset(of: elements) else {
 			throw NSError(domain: "", code: -1, userInfo: ["reason": "Elements array not contains mandatory fields"])
 		}
+		guard elements.first(where: { !$0.validate() }) == nil else {
+			throw NSError(domain: "", code: -1, userInfo: ["reason": "Some of elements are invalid"])
+		}
 
 		return UserModel(elements: elements)
 	}
@@ -69,7 +72,7 @@ fileprivate extension UserProfileElementsView.Element {
 	}
 	
 	static var mandatory: Set<UserProfileElementsView.Element> {
-		return [.profileImage(nil), .displayName(nil), .location(nil), .bDay(nil), .gender(nil)]
+		return [.displayName(nil), .realName(nil), .location(nil), .bDay(nil), .gender(nil), .maritalStatus(nil)]
 	}
 	
 	var isMandatory: Bool {
