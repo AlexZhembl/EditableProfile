@@ -36,6 +36,7 @@
 		ACA542C124797E8D00A57CB1 /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */; };
 		ACA542C3247983B500A57CB1 /* UserModelProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */; };
 		ACA542C52479A00600A57CB1 /* UserProfileModelFrabric.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */; };
+		ACA542C7247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA542C6247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift */; };
 		CF89825B659A5986BCA76560 /* Pods_EditableProfile_EditableProfileUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F476D0A074B939C3909B56CE /* Pods_EditableProfile_EditableProfileUITests.framework */; };
 		F00ABD61B5DBFBF191A3C147 /* Pods_EditableProfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8829F918D2810955CFF2CF /* Pods_EditableProfile.framework */; };
 /* End PBXBuildFile section */
@@ -99,6 +100,7 @@
 		ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModelProviderTests.swift; sourceTree = "<group>"; };
 		ACA542C42479A00600A57CB1 /* UserProfileModelFrabric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileModelFrabric.swift; sourceTree = "<group>"; };
+		ACA542C6247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileAttributesAndLocationsFetcherTests.swift; sourceTree = "<group>"; };
 		AFF0D93AD119CB61AC98EB1A /* Pods-EditableProfile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EditableProfile.debug.xcconfig"; path = "Target Support Files/Pods-EditableProfile/Pods-EditableProfile.debug.xcconfig"; sourceTree = "<group>"; };
 		F476D0A074B939C3909B56CE /* Pods_EditableProfile_EditableProfileUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EditableProfile_EditableProfileUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -169,6 +171,7 @@
 			children = (
 				AC371BDC247420CF00B35BB1 /* RootTests.swift */,
 				ACA542C2247983B500A57CB1 /* UserModelProviderTests.swift */,
+				ACA542C6247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift */,
 				ACA542C024797E8D00A57CB1 /* UserProfileTests.swift */,
 				AC371BDE247420CF00B35BB1 /* Info.plist */,
 			);
@@ -559,6 +562,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACA542C7247AA6E100A57CB1 /* UserProfileAttributesAndLocationsFetcherTests.swift in Sources */,
 				ACA542C124797E8D00A57CB1 /* UserProfileTests.swift in Sources */,
 				AC371BDD247420CF00B35BB1 /* RootTests.swift in Sources */,
 				ACA542C3247983B500A57CB1 /* UserModelProviderTests.swift in Sources */,

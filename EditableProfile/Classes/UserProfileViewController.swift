@@ -15,6 +15,10 @@ protocol UserProfileView: class {
 	func showDatePicker(for element: Element)
 	func dismissPicker()
 	func showError(for element: Element, error: String)
+	
+	func showActivityIndicator()
+	func stopActivityIndicator()
+	func showGeneralError(_ error: String)
 }
 
 final class UserProfileViewController: UIViewController {
@@ -35,7 +39,7 @@ final class UserProfileViewController: UIViewController {
 				self?.viewModel.datePickerDidSelect(date: date, for: element)
 		})
         elementsView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(elementsView)
+        view.insertSubview(elementsView, at: 0)
         NSLayoutConstraint.activate([
             elementsView.topAnchor.constraint(equalTo: view.topAnchor),
             elementsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -107,5 +111,19 @@ extension UserProfileViewController: UserProfileView {
 	
 	func showError(for element: Element, error: String) {
 		elementsView.showError(for: element, error: error)
+	}
+	
+	func showActivityIndicator() {
+		let center = CGPoint(x: view.frame.midX, y: view.frame.midY)
+		view.makeToastActivity(center)
+	}
+	
+	func stopActivityIndicator() {
+		view.hideToastActivity()
+	}
+	
+	func showGeneralError(_ error: String) {
+		let center = CGPoint(x: view.frame.midX, y: view.frame.midY)
+		view?.makeToast(error, point: center, title: nil, image: nil, completion: nil)
 	}
 }

@@ -27,10 +27,6 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 	private var attributes: UserProfileAttributesResponse?
 	private var locations: UserProfileLocationsResponse?
 	private var viewElements: Set<Element> = []
-	private lazy var bDayFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		return formatter
-	}()
     
 	init(router: UserProfileRouter,
 		 attributesAndLocationsFetcher: UserProfileAttributesAndLocationsFetcher,
@@ -43,31 +39,40 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
     }
     
     func viewDidLoad() {
-        attributesAndLocationsFetcher.fetchAttributes { [weak self] attributes in
-			self?.attributes = attributes
-        }
-        
-        attributesAndLocationsFetcher.fetchLocations { [weak self] locations in
-			self?.locations = locations
-        }
+		// MARK: - Note: In normal app we should fetch data only user interact with
+		// relative element. Of If it is a big amount, we could start some Service
+		// to download it while we at another part of ui
+		// Sure we could also provide caching for data which is not updates too much
+		view?.showActivityIndicator()
 		
-		let model = userModelProvider.fetchUserModel()
-	
-		viewElements = [.profileImage(model?.picture),
-						.displayName((text: model?.displayName, placeholder: "Display name")),
-						.realName((text: model?.realName, placeholder: "Real name")),
-						.location((loc: model?.location, placeholder: "Your location")),
-						.bDay((date: model?.bDay, placeholder: "Birthday date")),
-						.gender((attr: model?.gender, placeholder: "Your gender")),
-						.ethnicity((attr: model?.ethnicity, placeholder: "Ethnicity")),
-						.religion((attr: model?.religion, placeholder: "Religion")),
-						.figure((attr: model?.figure, placeholder: "Figure")),
-						.maritalStatus((attr: model?.maritalStatus, placeholder: "Material status")),
-						.height((text: model?.height, placeholder: "Height"), isEnabled: model == nil),
-						.occupation((text: model?.occupation, placeholder: "Occupation")),
-						.aboutMe((text: model?.aboutMe, placeholder: "About me")),
-						.doneButton((text: model == nil ? "Register" : "Update", placeholder: ""))]
-		view?.updateElementsView(with: Array(viewElements))
+		loadLocationsAndAttributes { [weak self] in
+			guard let self = self else {
+				return
+			}
+			
+			self.view?.stopActivityIndicator()
+			guard self.attributes != nil, self.locations != nil else {
+				self.view?.showGeneralError("Fetching data problems")
+				return
+			}
+			
+			let model = self.userModelProvider.fetchUserModel()
+			self.viewElements = [.profileImage(model?.picture),
+								 .displayName((text: model?.displayName, placeholder: "Display name")),
+								 .realName((text: model?.realName, placeholder: "Real name")),
+								 .location((loc: model?.location, placeholder: "Your location")),
+								 .bDay((date: model?.bDay, placeholder: "Birthday date")),
+								 .gender((attr: model?.gender, placeholder: "Your gender")),
+								 .ethnicity((attr: model?.ethnicity, placeholder: "Ethnicity")),
+								 .religion((attr: model?.religion, placeholder: "Religion")),
+								 .figure((attr: model?.figure, placeholder: "Figure")),
+								 .maritalStatus((attr: model?.maritalStatus, placeholder: "Material status")),
+								 .height((text: model?.height, placeholder: "Height"), isEnabled: model == nil),
+								 .occupation((text: model?.occupation, placeholder: "Occupation")),
+								 .aboutMe((text: model?.aboutMe, placeholder: "About me")),
+								 .doneButton((text: model == nil ? "Register" : "Update", placeholder: ""))]
+			self.view?.updateElementsView(with: Array(self.viewElements))
+		}
     }
 	
 	func didInteractElement(_ element: Element, value: String?) {
@@ -184,6 +189,22 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 	func dismissButtonDidTap() {
 		router.dismissViewController()
 	}
+	
+	private func loadLocationsAndAttributes(with completion: @escaping () -> Void) {
+		// MARK: - Not the best solution, I know, but for challenge could be well
+		let completionGroup = DispatchGroup()
+		completionGroup.enter()
+        attributesAndLocationsFetcher.fetchAttributes { [weak self] attributes in
+			self?.attributes = attributes
+			completionGroup.leave()
+        }
+		completionGroup.enter()
+        attributesAndLocationsFetcher.fetchLocations { [weak self] locations in
+			self?.locations = locations
+			completionGroup.leave()
+        }
+		completionGroup.notify(queue: .main, execute: completion)
+	}
 }
 
 extension UserLocation: SingleChoicePickerViewChoicable {
@@ -195,33 +216,31 @@ extension UserAttribute: SingleChoicePickerViewChoicable {
 	var title: String { name }
 }
 
-// MARK: - I just want to store my elements in Set, so I need Hashable -> RawRepresentable
+// MARK: - I just want to store my elements in Set, so I need Hashable -> easy to implement with RawRepresentable
 
 extension UserProfileElementsView.Element: RawRepresentable, Hashable {
 	typealias RawValue = Int
 	
 	var rawValue: RawValue {
 		switch self {
-		case .profileImage: return 1
-		case .displayName: return 2
-		case .realName: return 3
-		case .location: return 4
-		case .bDay: return 5
-		case .gender: return 6
-		case .ethnicity: return 7
-		case .religion: return 8
-		case .figure: return 9
+		case .profileImage:  return 1
+		case .displayName: 	 return 2
+		case .realName:		 return 3
+		case .location: 	 return 4
+		case .bDay: 		 return 5
+		case .gender: 		 return 6
+		case .ethnicity: 	 return 7
+		case .religion:      return 8
+		case .figure: 	 	 return 9
 		case .maritalStatus: return 10
-		case .height: return 11
-		case .occupation: return 12
-		case .aboutMe: return 13
-		case .doneButton: return 14
+		case .height: 		 return 11
+		case .occupation: 	 return 12
+		case .aboutMe: 	 	 return 13
+		case .doneButton: 	 return 14
 		}
 	}
 	
-	init?(rawValue: RawValue) {
-		return nil
-	}
+	init?(rawValue: RawValue) { nil }
 	
 	static func == (lhs: UserProfileElementsView.Element, rhs: UserProfileElementsView.Element) -> Bool {
 		return lhs.rawValue == rhs.rawValue

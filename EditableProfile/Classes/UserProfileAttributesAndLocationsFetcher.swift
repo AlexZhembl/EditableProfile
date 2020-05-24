@@ -28,6 +28,10 @@ final class UserProfileAttributesAndLocationsFetcherImpl: UserProfileAttributesA
                 print("error with locations: \(error)")
                 completion(nil)
             case .success(let response):
+				guard response.cities.first != nil else {
+					completion(nil)
+					return
+				}
                 completion(response)
             }
         }
@@ -41,6 +45,14 @@ final class UserProfileAttributesAndLocationsFetcherImpl: UserProfileAttributesA
                 print("error with attributes: \(error)")
                 completion(nil)
             case .success(let response):
+				guard response.gender.first != nil,
+				response.ethnicity.first != nil,
+				response.religion.first != nil,
+				response.figure.first != nil,
+				response.maritalStatus.first != nil else {
+					completion(nil)
+					return
+				}
                 completion(response)
             }
         }
@@ -73,6 +85,6 @@ fileprivate enum UserProfileAttributesAndLocationsFetcherRequest: HTTPURLRequest
         request.httpMethod = "GET"
         request.timeoutInterval = Constants.timeoutInterval
       
-        return request//try URLEncoding.default.encode(request)
+        return request
     }
 }

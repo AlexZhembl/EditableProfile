@@ -14,24 +14,24 @@ import Alamofire
 // (to no to test Alamafire at all cause it has own tests)
 
 protocol HTTPFabric {
-    func makeRequest<Response: Decodable>(_ request: HTTPURLRequestConvertible, complitionHandler: @escaping (Result<Response, Error>) -> Void)
+    func makeRequest<Response: Decodable>(_ request: HTTPURLRequestConvertible, completionHandler: @escaping (Result<Response, Error>) -> Void)
 }
 
 final class HTTPFabricImpl: HTTPFabric {
     
-    func makeRequest<Response: Decodable>(_ request: HTTPURLRequestConvertible, complitionHandler: @escaping (Result<Response, Error>) -> Void) {
+    func makeRequest<Response: Decodable>(_ request: HTTPURLRequestConvertible, completionHandler: @escaping (Result<Response, Error>) -> Void) {
         AF.request(AfRequest(requestConvertible: request))
             .validate()
             .responseDecodable(of: Response.self) { response in
                 if let error = response.error {
-                    complitionHandler(.failure(error))
+                    completionHandler(.failure(error))
                     return
                 }
                 if let value = response.value {
-                    complitionHandler(.success(value))
+                    completionHandler(.success(value))
                     return
                 }
-                complitionHandler(.failure(NSError(domain: "HTTPFabric", code: -1, userInfo: ["Reason" : "Unexpected error"])))
+                completionHandler(.failure(NSError(domain: "HTTPFabric", code: -1, userInfo: ["Reason" : "Unexpected error"])))
             }
     }
 }

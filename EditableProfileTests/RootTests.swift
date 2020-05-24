@@ -40,8 +40,8 @@ final class RootTests: QuickSpec {
 					let model = container.resolve(RootViewModel.self)!
 					model.viewWillAppear()
 					
-					expect(rootVCMock.registerButton != nil).to(equal(true))
-					expect(rootVCMock.changeProfileButton != nil).to(equal(true))
+					expect(rootVCMock.registerButton).toNot(beNil())
+					expect(rootVCMock.changeProfileButton).toNot(beNil())
 					
 					expect(rootVCMock.changeProfileButton?.isHidden).to(equal(true))
 				}
@@ -56,8 +56,8 @@ final class RootTests: QuickSpec {
 					let model = container.resolve(RootViewModel.self)!
 					model.viewWillAppear()
 					
-					expect(rootVCMock.registerButton != nil).to(equal(true))
-					expect(rootVCMock.changeProfileButton != nil).to(equal(true))
+					expect(rootVCMock.registerButton).toNot(beNil())
+					expect(rootVCMock.changeProfileButton).toNot(beNil())
 					
 					expect(rootVCMock.changeProfileButton?.isHidden).to(equal(false))
 				}

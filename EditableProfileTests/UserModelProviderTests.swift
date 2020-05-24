@@ -36,7 +36,7 @@ final class UserModelProviderTests: QuickSpec {
 				it("fetch nothing") {
 					userModelProvider = container.resolve(UserModelProvider.self)!
 					let userModel = userModelProvider.fetchUserModel()
-					expect(userModel == nil).to(equal(true))
+					expect(userModel).to(beNil())
 				}
 			
 				it("register new user") {
@@ -62,7 +62,7 @@ final class UserModelProviderTests: QuickSpec {
 				it("fetch model") {
 					userModelProvider = container.resolve(UserModelProvider.self)!
 					let userModel = userModelProvider.fetchUserModel()
-					expect(userModel != nil).to(equal(true))
+					expect(userModel).toNot(beNil())
 				}
 			
 				it("remove user") {
