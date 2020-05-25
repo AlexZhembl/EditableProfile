@@ -15,11 +15,11 @@ I used npm server from challenge description to fetch attributes and locations, 
 `UserProfileAttributesAndLocationsFetcher.swift line:68 and line:72`
 
 ## Technologies I used
-* MVVM pattern choosed as primary
+* MVP-R pattern chose as primary (Presenter called 'ViewModel' according to my current project habit, I know the difference =) )
 * Support SOLID principles where it is possible
 * Wrote clean and reusable code
 * Provide some UI test for primary use case  
-  
+
 * [Swinject](https://github.com/Swinject/Swinject) for DI
 * [Nimble](https://github.com/Quick/Nimble) and [Quick](https://github.com/Quick/Quick) for tests
 * [Alamofire](https://github.com/Alamofire/Alamofire) for http networking

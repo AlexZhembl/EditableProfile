@@ -84,7 +84,7 @@ fileprivate enum UserProfileAttributesAndLocationsFetcherRequest: HTTPURLRequest
         var request = URLRequest(url: url.appendingPathComponent(path))
         request.httpMethod = "GET"
         request.timeoutInterval = Constants.timeoutInterval
-      
+		request.cachePolicy = .reloadRevalidatingCacheData
         return request
     }
 }
