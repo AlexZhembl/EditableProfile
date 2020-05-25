@@ -18,7 +18,7 @@ I used npm server from challenge description to fetch attributes and locations, 
 * MVP-R pattern chose as primary (Presenter called 'ViewModel' according to my current project habit, I know the difference =) )
 * Support SOLID principles where it is possible
 * Wrote clean and reusable code
-* Provide some UI test for primary use case  
+* Provide some UI test for primary use case  (**WARNING:** ensure that I/O -> Keyboard -> Connect hardware keyboard is OFF)
 
 * [Swinject](https://github.com/Swinject/Swinject) for DI
 * [Nimble](https://github.com/Quick/Nimble) and [Quick](https://github.com/Quick/Quick) for tests
