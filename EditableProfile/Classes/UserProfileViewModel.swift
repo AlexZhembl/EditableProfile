@@ -61,7 +61,9 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 			// just because to update view we can use single element and not reconfigure whole model
 			// But for now I see another ways, maybe more beautiful
 			let model = self.userModelProvider.fetchUserModel()
-			self.viewElements = [.profileImage(model?.picture),
+            self.viewElements = [.anotherProfileImage(model?.anotherPicture),
+                                 .profileImage(model?.picture),
+                                 .pictureSwitch(false),
 								 .displayName((text: model?.displayName, placeholder: "Display name")),
 								 .realName((text: model?.realName, placeholder: "Real name")),
 								 .location((loc: model?.location, placeholder: "Your location")),
@@ -71,7 +73,7 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 								 .religion((attr: model?.religion, placeholder: "Religion")),
 								 .figure((attr: model?.figure, placeholder: "Figure")),
 								 .maritalStatus((attr: model?.maritalStatus, placeholder: "Material status")),
-								 .height((text: model?.height, placeholder: "Height"), isEnabled: model == nil),
+								 .height((text: model?.height, placeholder: "Height"), isEnabled: true/*model == nil*/),
 								 .occupation((text: model?.occupation, placeholder: "Occupation")),
 								 .aboutMe((text: model?.aboutMe, placeholder: "About me")),
 								 .doneButton((text: model == nil ? "Register" : "Update", placeholder: ""))]
@@ -86,14 +88,30 @@ final class UserProfileViewModelImpl: UserProfileViewModel {
 	func didInteractElement(_ element: Element, value: String?) {
 		var updElement: Element?
 		switch element {
+        case .pictureSwitch(let isAnotherAsPrimary):
+            let newElement: Element = .pictureSwitch(!isAnotherAsPrimary)
+            viewElements.update(with: newElement)
+             
+            view?.updateElementsView(with: [newElement])
 		case .profileImage:
+            router.presentImagePicker { [weak self] image in
+                guard let image = image else {
+                    print("No image choosed")
+                    return
+                }
+                
+                let updated: Element = Element.profileImage(image)
+                self?.viewElements.update(with: updated)
+                self?.view?.updateElementsView(with: [updated])
+            }
+        case .anotherProfileImage:
 			router.presentImagePicker { [weak self] image in
 				guard let image = image else {
 					print("No image choosed")
 					return
 				}
 				
-				let updated = Element.profileImage(image)
+                let updated: Element = Element.anotherProfileImage(image)
 				self?.viewElements.update(with: updated)
 				self?.view?.updateElementsView(with: [updated])
 			}
@@ -234,6 +252,8 @@ extension UserProfileElementsView.Element: RawRepresentable, Hashable {
 	
 	var rawValue: RawValue {
 		switch self {
+        case .pictureSwitch: return 17
+        case .anotherProfileImage: return 15
 		case .profileImage:  return 1
 		case .displayName: 	 return 2
 		case .realName:		 return 3

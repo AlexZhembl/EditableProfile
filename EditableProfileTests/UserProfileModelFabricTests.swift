@@ -157,5 +157,65 @@ final class UserProfileModelFabricTests: QuickSpec {
 				}
 			}
 		}
+        
+        describe("Test images with primary and secondary") {
+            it ("Shoud store profile pict as primary (in profile pic field)") {
+                
+                let fabric = container.resolve(UserProfileModelFrabric.self)!
+                
+                let primaryImage = UIImage()
+                let secondaryImage = UIImage()
+                let elements: Set<UserProfileElementsView.Element> = [.displayName((textGeneratingClosure(13), nil)),
+                                                                   .realName((textGeneratingClosure(123), nil)),
+                                                                   .bDay((Date(timeIntervalSinceNow: -100), nil)),
+                                                                   .gender((UserAttribute(uid: "", name: ""), nil)),
+                                                                   .maritalStatus((UserAttribute(uid: "", name: ""), nil)),
+                                                                   .location((UserLocation(lat: "", lon: "", city: ""), nil)),
+                                                                   
+                                                                   .profileImage(primaryImage),
+                                                                   .anotherProfileImage(secondaryImage),
+                                                                   .pictureSwitch(false),
+                ]
+                guard let model = try? fabric.createModel(from: elements) else {
+                    return
+                }
+                
+                if model.picture === primaryImage && model.anotherPicture === secondaryImage {
+                    expect(false).to(equal(false))
+                }
+                else {
+                     expect(false).to(equal(true))
+                }
+            }
+            
+            it ("Shoud store profile pict as secondary (in another profile pic field)") {
+                
+                let fabric = container.resolve(UserProfileModelFrabric.self)!
+                
+                let primaryImage = UIImage()
+                let secondaryImage = UIImage()
+                let elements: Set<UserProfileElementsView.Element> = [.displayName((textGeneratingClosure(13), nil)),
+                                                                      .realName((textGeneratingClosure(123), nil)),
+                                                                      .bDay((Date(timeIntervalSinceNow: -100), nil)),
+                                                                      .gender((UserAttribute(uid: "", name: ""), nil)),
+                                                                      .maritalStatus((UserAttribute(uid: "", name: ""), nil)),
+                                                                      .location((UserLocation(lat: "", lon: "", city: ""), nil)),
+                                                                      
+                                                                      .profileImage(primaryImage),
+                                                                      .anotherProfileImage(secondaryImage),
+                                                                      .pictureSwitch(true),
+                ]
+                guard let model = try? fabric.createModel(from: elements) else {
+                    return
+                }
+                
+                if model.picture === secondaryImage && model.anotherPicture === primaryImage {
+                    expect(false).to(equal(false))
+                }
+                else {
+                    expect(false).to(equal(true))
+                }
+            }
+        }
 	}
 }

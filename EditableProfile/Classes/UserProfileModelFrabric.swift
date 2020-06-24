@@ -40,9 +40,33 @@ fileprivate extension UserModel {
 	
 	convenience init(elements: Set<UserProfileElementsView.Element>) {
 		self.init()
+        
+        var isAnotherPictureIsPrimary: Bool = false
+        elements.forEach {
+            switch $0 {
+            case .pictureSwitch(let anotherIsPrimary): isAnotherPictureIsPrimary = anotherIsPrimary
+            default: break
+            }
+        }
+        
+        
 		elements.forEach { element in
 			switch element {
-			case .profileImage(let image): 	picture = image
+            case .pictureSwitch: break
+            case .anotherProfileImage(let image):
+                if isAnotherPictureIsPrimary {
+                    picture = image
+                }
+                else {
+                    anotherPicture = image
+                }
+			case .profileImage(let image):
+                if isAnotherPictureIsPrimary {
+                    anotherPicture = image
+                }
+                else {
+                    picture = image
+                }
 			case .displayName(let content): displayName = content?.text
 			case .realName(let content): 	realName = content?.text
 			case .location(let content): 	location = content?.loc
@@ -68,13 +92,13 @@ fileprivate extension UserProfileElementsView.Element {
 	private enum Constants {
 		static let freeTextMaxLenght = 256
 		static let aboutMeTextMaxLenght = 5000
-		static let heightRange = Range<Int>(uncheckedBounds: (lower: 50, upper: 250))
+		static let heightRange = Range<Float>(uncheckedBounds: (lower: 50, upper: 250))
 		static let bDayRange = Range<Date>(uncheckedBounds: (lower: Date(timeIntervalSince1970: 0),
 															 upper: Date()))
 	}
 	
 	static var mandatory: Set<UserProfileElementsView.Element> {
-		return [.displayName(nil), .realName(nil), .location(nil), .bDay(nil), .gender(nil), .maritalStatus(nil)]
+        return [.displayName(nil), .realName(nil), .location(nil), .bDay(nil), .gender(nil), .maritalStatus(nil)]
 	}
 	
 	var isMandatory: Bool {
@@ -83,7 +107,7 @@ fileprivate extension UserProfileElementsView.Element {
 	
 	func validate() -> Bool {
 		switch self {
-		case .profileImage(let image):
+        case .profileImage(let image), .anotherProfileImage(let image):
 			return image != nil || !isMandatory
 			
 		case .displayName(let content),
@@ -114,7 +138,7 @@ fileprivate extension UserProfileElementsView.Element {
 			guard let text = content?.text, text.count > 0 else {
 				return !isMandatory
 			}
-			guard let intValue = Int(text), Constants.heightRange.contains(intValue) else {
+			guard let intValue = Float(text), Constants.heightRange.contains(intValue) else {
 				return false
 			}
 			return true

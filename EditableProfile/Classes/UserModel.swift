@@ -11,6 +11,7 @@ import UIKit
 
 final class UserModel: Codable {
 	var picture: UIImage?
+    var anotherPicture: UIImage?
 	var displayName: String?
 	var realName: String?
 	var location: UserLocation?
@@ -38,6 +39,7 @@ final class UserModel: Codable {
 		case height
 		case occupation
 		case aboutMe
+        case anotherPicture
 	}
 	
 	init(from decoder: Decoder) throws {
@@ -62,6 +64,13 @@ final class UserModel: Codable {
 		else {
 			picture = nil
 		}
+        
+        if let anotherImageData = try container.decodeIfPresent(Data.self, forKey: .anotherPicture) {
+            anotherPicture = UIImage(data: anotherImageData)
+        }
+        else {
+            anotherPicture = nil
+        }
 	}
 	
 	func encode(to encoder: Encoder) throws {
@@ -81,6 +90,7 @@ final class UserModel: Codable {
 		try container.encodeIfPresent(aboutMe, forKey: .aboutMe)
 		
 		try container.encodeIfPresent(picture?.pngData(), forKey: .picture)
+        try container.encodeIfPresent(anotherPicture?.pngData(), forKey: .anotherPicture)
 	}
 	
 	init() {
@@ -97,6 +107,7 @@ final class UserModel: Codable {
 		self.height = nil
 		self.occupation = nil
 		self.aboutMe = nil
+        anotherPicture = nil
 	}
 }
 

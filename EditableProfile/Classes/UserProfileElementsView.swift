@@ -19,6 +19,8 @@ final class UserProfileElementsView: UIView {
 		typealias DateContent = (date: Date?, placeholder: String?)?
 		
 		case profileImage(UIImage?)
+        case anotherProfileImage(UIImage?)
+        case pictureSwitch(Bool)
 		case displayName(TextContent)
 		case realName(TextContent)
 		case location(LocationContent)
@@ -66,6 +68,18 @@ final class UserProfileElementsView: UIView {
         
         return button
     }()
+    private let anotherPictureButton: UserProfilePictureButton = {
+        let button = UserProfilePictureButton(target: self, action: #selector(buttonDidTap), ai: "pictureButton")
+        button.layer.cornerRadius = Constants.pictureButtonSize.width * 0.5
+        
+        return button
+    }()
+    private let pictureSwitch: UISwitch = {
+       let sw = UISwitch()
+        sw.translatesAutoresizingMaskIntoConstraints = false
+        sw.addTarget(self, action: #selector(buttonDidTap), for: .valueChanged)
+        return sw
+    }()
 	private lazy var displayNameField = UserProfileTextField(delegate: self, ai: "displayNameField")
     private lazy var realNameField = UserProfileTextField(delegate: self, ai: "realNameField")
     private lazy var locationField = UserProfileLocationField(delegate: self, ai: "locationField")
@@ -75,7 +89,14 @@ final class UserProfileElementsView: UIView {
     private lazy var ethnicityButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "ethnicityButton")
     private lazy var religionButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "religionButton")
     private lazy var figureButton = UserProfileAttributesButton(target: self, action: #selector(buttonDidTap), ai: "figureButton")
-    private lazy var heightField = UserProfileTextField(delegate: self, ai: "heightField")
+    private lazy var heightSlider: UISlider = {
+       let slider = UISlider()
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        slider.addTarget(self, action: #selector(buttonDidTap), for: .valueChanged)
+        return slider
+    }()
+    
+    
     private lazy var occupationField = UserProfileTextField(delegate: self, ai: "occupationField")
 	private lazy var aboutMeField = UserProfileTextView(delegate: self, ai: "aboutMeField")
     private lazy var doneButton = UserProfileTextButton(target: self, action: #selector(buttonDidTap), ai: "doneButton")
@@ -110,6 +131,8 @@ final class UserProfileElementsView: UIView {
 		// MARK: - Point where we initiating elements with date from model
 		elements.forEach { element in
 			switch element {
+            case .pictureSwitch(let anotherPrimary): pictureSwitch.isOn = anotherPrimary
+            case .anotherProfileImage(let image): anotherPictureButton.setContent(image)
 			case .profileImage(let image): 		 pictureButton.setContent(image)
 			case .displayName(let text): 		 displayNameField.setContent(text)
 			case .realName(let text): 		  	 realNameField.setContent(text)
@@ -124,9 +147,19 @@ final class UserProfileElementsView: UIView {
 			case .aboutMe(let text): 			 aboutMeField.setContent(text)
 			case .doneButton(let text): 		 doneButton.setContent(text)
 			case .height(let text, let isEnabled):
-				heightField.setContent(text)
-				heightField.keyboardType = .numberPad
-				heightField.isEnabled = isEnabled
+                let minimum: Float = 100
+                let value: Float
+                if let content = text, let string = content.text, let int = Float(string) {
+                    value = int
+                }
+                else {
+                    value = minimum
+                }
+
+                heightSlider.minimumValue = minimum
+                heightSlider.maximumValue = Float(200)
+                heightSlider.value = value
+				heightSlider.isEnabled = isEnabled
 			}
 		}
 	}
@@ -172,6 +205,8 @@ fileprivate extension UserProfileElementsView {
 	
 	func view(for element: Element) -> UIView {
 		switch element {
+        case .pictureSwitch:    return pictureSwitch
+        case .anotherProfileImage: return anotherPictureButton
 		case .profileImage: 	return pictureButton
 		case .displayName: 		return displayNameField
 		case .realName: 		return realNameField
@@ -182,7 +217,7 @@ fileprivate extension UserProfileElementsView {
 		case .religion: 		return religionButton
 		case .figure: 			return figureButton
 		case .maritalStatus: 	return maritalStatusButton
-		case .height: 			return heightField
+		case .height: 			return heightSlider
 		case .occupation: 		return occupationField
 		case .aboutMe: 			return aboutMeField
 		case .doneButton: 		return doneButton
@@ -191,6 +226,8 @@ fileprivate extension UserProfileElementsView {
 	
 	func element(for subview: UIView) -> Element? {
 		switch subview {
+        case pictureSwitch:         return .pictureSwitch(false)
+        case anotherPictureButton:  return .anotherProfileImage(nil)
 		case pictureButton: 		return .profileImage(nil)
 		case displayNameField: 		return .displayName(nil)
 		case realNameField: 		return .realName(nil)
@@ -201,7 +238,7 @@ fileprivate extension UserProfileElementsView {
 		case religionButton: 		return .religion(nil)
 		case figureButton: 			return .figure(nil)
 		case maritalStatusButton: 	return .maritalStatus(nil)
-		case heightField: 			return .height(nil, isEnabled: heightField.isEnabled)
+		case heightSlider: 			return .height(nil, isEnabled: heightSlider.isEnabled)
 		case occupationField: 		return .occupation(nil)
 		case aboutMeField: 			return .aboutMe(nil)
 		case doneButton: 			return .doneButton(nil)
@@ -209,14 +246,22 @@ fileprivate extension UserProfileElementsView {
 		}
 	}
 	
-	@objc func buttonDidTap(_ sender: UIButton) {
+	@objc func buttonDidTap(_ sender: UIControl) {
 		guard let element = element(for: sender) else {
 			assertionFailure("Could not find element for subview")
 			return
 		}
 		endEditing(true)
 		scrollViewToTop(sender)
-		elementInteractionClosure(element, nil)
+        
+        if let dff = sender as? UISlider {
+            
+            let newElement = Element.height(Element.TextContent((String(dff.value), nil)), isEnabled: true)
+            elementInteractionClosure(newElement, String(dff.value))
+        }
+        else {
+            elementInteractionClosure(element, nil)
+        }
     }
 	
 	private func scrollViewToTop(_ subview: UIView) {
@@ -293,6 +338,8 @@ fileprivate extension UserProfileElementsView {
         scrollView.addSubview(contentView)
         
         contentView.addSubview(pictureButton)
+        contentView.addSubview(anotherPictureButton)
+        contentView.addSubview(pictureSwitch)
         
         let nameStackView = UIStackView(arrangedSubviews: [displayNameField, realNameField])
         nameStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -317,7 +364,7 @@ fileprivate extension UserProfileElementsView {
         signleButtonsStackView.spacing = 0
         contentView.addSubview(signleButtonsStackView)
         
-        let heightAndOccupationStackView = UIStackView(arrangedSubviews: [heightField, occupationField])
+        let heightAndOccupationStackView = UIStackView(arrangedSubviews: [heightSlider, occupationField])
         heightAndOccupationStackView.translatesAutoresizingMaskIntoConstraints = false
         heightAndOccupationStackView.distribution = .fillEqually
         heightAndOccupationStackView.axis = .vertical
@@ -348,15 +395,20 @@ fileprivate extension UserProfileElementsView {
             pictureButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             pictureButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.verticalSpacing),
             
-            pictureButton.widthAnchor.constraint(equalToConstant: Constants.pictureButtonSize.width),
-            pictureButton.heightAnchor.constraint(equalToConstant: Constants.pictureButtonSize.height),
-            pictureButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            pictureButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.verticalSpacing),
+            anotherPictureButton.widthAnchor.constraint(equalToConstant: Constants.pictureButtonSize.width),
+            anotherPictureButton.heightAnchor.constraint(equalToConstant: Constants.pictureButtonSize.height),
+            anotherPictureButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            anotherPictureButton.topAnchor.constraint(equalTo: pictureButton.bottomAnchor, constant: Constants.verticalSpacing),
+            
+            
+            pictureSwitch.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            pictureSwitch.topAnchor.constraint(equalTo: anotherPictureButton.bottomAnchor, constant: Constants.verticalSpacing),
+            
             
             nameStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nameStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             nameStackView.heightAnchor.constraint(equalToConstant: Constants.singleLineFiledHeight),
-            nameStackView.topAnchor.constraint(equalTo: pictureButton.bottomAnchor, constant: Constants.verticalSpacing),
+            nameStackView.topAnchor.constraint(equalTo: pictureSwitch.bottomAnchor, constant: Constants.verticalSpacing),
             
             locationField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             locationField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
